@@ -40,3 +40,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 
 Firebase serve 
+
+
+##Server para comentar crear los usuarios 
+https://firebase-php.readthedocs.io/en/latest/index.html intentar gestionar la parte del admin desde algo parecido a un api armado en slim para gestionar la parte del admin por mas que lo tenga aparte ,
+ Revisar cual seria el mejor metodo para tener la coneccion entre este api y el servicio de admin a fin de saber que analizarlo como un metodo completo o tomarlo como el usuario de firebase que esta logueado intentando hacer lo que esta haciendo , lo que no entiendo es como no esta pudiendo hacer 

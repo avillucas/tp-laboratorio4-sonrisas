@@ -9,7 +9,7 @@ import { TemplateComponent } from './paginas/template/template.component';
 
 const routes: Routes = [
   { path: 'registro', component: RegistroComponent },
-  { path: 'ingreso', component: IngresoComponent },
+  { path: 'Ingreso', component: IngresoComponent },
   {
     path: '',
     component: TemplateComponent,

@@ -17,7 +17,11 @@ export const environment = {
     auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
     // tslint:disable-next-line: max-line-length
     client_x509_cert_url:'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-xwc47%40tplaboratorio4-a.iam.gserviceaccount.com'
-  }
+  },
+  usuarios:[
+     { email: 'cliente@test.com', clave: 'client' },
+     { email: 'admin@test.com', clave: 'admin13' }
+  ]
 };
 
 /*
