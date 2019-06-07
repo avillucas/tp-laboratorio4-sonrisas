@@ -8,8 +8,8 @@ import { NotfoundComponent } from './paginas/notfound/notfound.component';
 import { TemplateComponent } from './paginas/template/template.component';
 
 const routes: Routes = [
-  { path: 'Registro', component: RegistroComponent },
-  { path: 'Ingreso', component: IngresoComponent },
+  { path: 'registro', component: RegistroComponent },
+  { path: 'ingreso', component: IngresoComponent },
   {
     path: '',
     component: TemplateComponent,

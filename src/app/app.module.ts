@@ -11,6 +11,12 @@ import { ErrorComponent } from './paginas/error/error.component';
 import { IngresoComponent } from './paginas/ingreso/ingreso.component';
 import { NotfoundComponent } from './paginas/notfound/notfound.component';
 import { TemplateComponent } from './paginas/template/template.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from '../environments/environment';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -27,6 +33,13 @@ import { TemplateComponent } from './paginas/template/template.component';
     AppRoutingModule,
     LayoutModule.forRoot(adminLteConf),
     BoxModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFireStorageModule,
+    AngularFireAuthModule,
+    AngularFirestoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
