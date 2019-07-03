@@ -1,0 +1,14 @@
+<table>
+  <thead>
+    <th>Nombre</th>
+    <th>Cuatrimestres</th>
+    <th>Cupos</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let mat of Materias| async">
+      <td>{{ mat.materia.Nombre }}</td>
+      <td>{{ mat.materia.Cuatrimestre }}</td>
+      <td appPorCupo [materia]="mat.materia" >{{ mat.materia.Cupos }}</td>
+    </tr>
+  </tbody>
+</table>

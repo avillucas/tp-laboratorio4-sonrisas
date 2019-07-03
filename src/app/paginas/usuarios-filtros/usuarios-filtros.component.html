@@ -1,0 +1,10 @@
+<form [formGroup]="FiltroForm" >
+<div class="form-group has-feedback">
+  <span class="glyphicon glyphicon-lock form-control-feedback">Tipo de Usuario</span>
+  <select  name="tipo" [formControl]="TipoControl"  (change)="Filtrar()"  >
+    <option value="0" selected="selected">Alumno</option>
+    <option value="1">Profesor</option>
+    <option value="2">Administrador</option>
+  </select>
+</div>
+</form>
