@@ -5,23 +5,23 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyCxxJP5c6x3mjDrnnaL04F5bY3Ow0I8rss',
-    authDomain: 'tplaboratorio4-a.firebaseapp.com',
-    databaseURL: 'https://tplaboratorio4-a.firebaseio.com',
-    projectId: 'tplaboratorio4-a',
-    storageBucket: 'tplaboratorio4-a.appspot.com',
-    messagingSenderId: '829785658201',
-    appId: '1:829785658201:web:4959c2eac3615eef'
+    apiKey: 'AIzaSyCiop5VHmLFwjEmAKaPCAJKJBmRJlj-Y_4',
+    authDomain: 'sonrisastp-8a3c9.firebaseapp.com',
+    databaseURL: 'https://sonrisastp-8a3c9.firebaseio.com',
+    projectId: 'sonrisastp-8a3c9',
+    storageBucket: '',
+    messagingSenderId: '202373428554',
+    appId: '1:202373428554:web:7b80147a04a39969'
   },
   usuarios: [
-    { email: 'admin@test.com', password: 'admin131313' },
-    { email: 'profesor@test.com', password: 'profesor1313' },
-    { email: 'alumno@test.com', password: 'alumno1313'},
+    { email: 'administrador@test.com', password: 'administrador131313' },
+    { email: 'especialista@test.com', password: 'especialista131313' },
+    { email: 'recepcionista@test.com', password: 'recepcionista131313' },
+    { email: 'cliente@test.com', password: 'cliente131313' },
   ],
   db: {
     usuarios: 'usuarios',
-    materias: 'materias',
-    mascotas: 'mascotas',
+    encuestas: 'encuestas',
     turnos: 'turnos'
   }
 };

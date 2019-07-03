@@ -1,5 +1,6 @@
 export enum TipoUsuario {
-  alumno,
-  profesor,
-  admin
+  cliente,
+  recepcionista,
+  especialista,
+  administrador
 }

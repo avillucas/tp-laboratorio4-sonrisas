@@ -1,27 +1,36 @@
 import { IUsuario } from '../models/usuario.model';
 import { environment } from 'src/environments/environment';
+import { TipoUsuario } from '../enums/tipo-usuario.enum';
 
 export abstract class Usuario {
   private uid: string;
   private email: string;
   private nombre: string;
-  protected admin: boolean;
-  protected profesor: boolean;
+  private tipo: TipoUsuario;
 
-  constructor(email: string, nombre: string, admin: boolean = false, profesor: boolean = false) {
+  constructor(email: string, nombre: string, tipo: TipoUsuario) {
     this.email = email;
     this.nombre = nombre;
-    this.admin = admin;
-    this.profesor = profesor;
+    this.tipo = tipo;
   }
 
-  public get IsAdmin(): boolean {
-    return this.admin && !this.profesor;
+  public get esAdministrador(): boolean {
+    return this.tipo == TipoUsuario.administrador;
   }
 
-  public get IsProfesor(): boolean {
-    return this.profesor;
+  public get esEspecialista(): boolean {
+    return this.tipo == TipoUsuario.especialista;
   }
+
+  public get esRecepcionista(): boolean {
+    return this.tipo == TipoUsuario.recepcionista;
+  }
+
+  public get esCliente(): boolean {
+    return this.tipo == TipoUsuario.cliente;
+  }
+
+
 
   public set Email(value: string) {
     this.email = value;
