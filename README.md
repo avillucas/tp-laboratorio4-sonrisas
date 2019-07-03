@@ -30,17 +30,17 @@ Especialistas: Usuario
 Recepcionista: Usuario
 
 Encuesta : 
-  - especialista : id
+  - turno: string ID 
   - experiencia : string 66  
 Turno ( lav 8 a 19 , s 8 a 14 15 min  ): 
-  - inicio:   
-  - especialista : 
-  - cliente : string  
-  - resenia: string 66
-  - consultorio: A-G
+  - inicio:Time   
+  - especialista:string ( UID)
+  - cliente : string ( UID)
+  - resena: string 66  
 + Reservar(cliente, especialista, time)  
 + Disponibles(Dia)
 + Tomados(especialista,Dia)
+
 
 
 

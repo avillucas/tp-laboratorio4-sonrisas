@@ -1,8 +1,13 @@
 import { IUsuario } from '../models/usuario.model';
 import { environment } from 'src/environments/environment';
 import { TipoUsuario } from '../enums/tipo-usuario.enum';
+import { IPersistible } from '../servicios/ipersistible.model';
+import { Administrador } from './administrador';
+import { Recepcionista } from './recepcionista';
+import { Cliente } from './clientes';
+import { Especialista } from './especialista';
 
-export abstract class Usuario {
+export abstract class Usuario implements IPersistible {
   private uid: string;
   private email: string;
   private nombre: string;
@@ -30,8 +35,6 @@ export abstract class Usuario {
     return this.tipo == TipoUsuario.cliente;
   }
 
-
-
   public set Email(value: string) {
     this.email = value;
   }
@@ -48,45 +51,29 @@ export abstract class Usuario {
     this.nombre = value;
   }
 
-  public get UID(): string {
-    return this.uid;
+  public get Tipo(): TipoUsuario {
+    return this.tipo;
   }
 
-  public set UID(value: string) {
-    this.uid = value;
-  }
-
-  public get Tipo(): string {
-    return (this.profesor) ? 'Profesor' : (this.admin) ? 'Admin' : 'Alumno';
-  }
-
-
-
-  get DAOData(): IUsuario {
+  DAOData(usuario: Usuario): IUsuario {
     return {
-      uid: this.uid,
-      email: this.email,
-      nombre: this.nombre,
-      admin: this.admin,
-      profesor: this.profesor,
+      email: usuario.email,
+      nombre: usuario.nombre,
+      tipo: usuario.tipo
     };
   }
 
-  get DAOIdentificador(): string {
-    return this.uid;
+  DataDAO(iusuario: IUsuario): Usuario {
+    if (iusuario.tipo == TipoUsuario.administrador) {
+      return new Administrador(iusuario.email, iusuario.nombre);
+    } else if (iusuario.tipo == TipoUsuario.especialista) {
+      return new Especialista(iusuario.email, iusuario.nombre);
+    } else if (iusuario.tipo == TipoUsuario.recepcionista) {
+      return new Recepcionista(iusuario.email, iusuario.nombre);
+    } else if (iusuario.tipo == TipoUsuario.cliente) {
+      return new Cliente(iusuario.email, iusuario.nombre);
+    }
   }
 
-  get DAOReferencia(): string {
-    return `${environment.db.usuarios} /${this.DAOIdentificador}`;
-  }
 
-  /*
-    DAOFromMap(map: any): Usuario {
-      //return new Usuario();
-    }
-
-    DAOtoMap(): any {
-
-    }
-    */
 }
