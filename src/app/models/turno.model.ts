@@ -1,5 +1,5 @@
 export interface ITurno {
-  id?: string;
+  profileImage?: string;
   time: string;
   paciente: any;
   veterinario: any;

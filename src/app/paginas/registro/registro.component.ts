@@ -4,9 +4,9 @@ import { AuthService } from '../../servicios/auth.service';
 import { Router } from '@angular/router';
 import { Usuario } from 'src/app/clases/usuario';
 import { TipoUsuario } from 'src/app/enums/tipo-usuario.enum';
-import { Administrador } from 'src/app/clases/administrador';
 import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { IUsuario } from 'src/app/models/usuario.model';
+import { StorageService } from 'src/app/servicios/storage.service';
 
 @Component({
   selector: 'app-registro',
@@ -19,11 +19,19 @@ export class RegistroComponent implements OnInit {
   public EmailControl: FormControl;
   public PasswordControl: FormControl;
   public TipoControl: FormControl;
+  public AvatarControl: FormControl;
   public RegistroForm: FormGroup;
   private tiposUsuario: TipoUsuario[];
 
+  private profileUrl: string;
 
-  constructor(private builder: FormBuilder, private authService: AuthService, private router: Router, private uService: UsuariosService) {
+  constructor(
+    private builder: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private uService: UsuariosService,
+    private sService: StorageService
+  ) {
     this.tiposUsuario = [TipoUsuario.administrador, TipoUsuario.especialista, TipoUsuario.recepcionista, TipoUsuario.cliente];
     this.NombreControl = new FormControl(this.NombreControl, [
       Validators.required,
@@ -45,6 +53,10 @@ export class RegistroComponent implements OnInit {
     ]);
 
     this.TipoControl = new FormControl(this.TipoControl, [
+      Validators.required
+    ]);
+
+    this.AvatarControl = new FormControl(this.AvatarControl, [
       Validators.required
     ]);
 
@@ -72,6 +84,10 @@ export class RegistroComponent implements OnInit {
     return this.RegistroForm.get('tipo');
   }
 
+  public get AvatarInput() {
+    return this.RegistroForm.get('avatar');
+  }
+
   private crear(email: string, nombre: string, tipo: TipoUsuario): Usuario {
     return this.uService.DataDAO({ email, nombre, tipo } as IUsuario
     );
@@ -89,6 +105,14 @@ export class RegistroComponent implements OnInit {
 
   public get TiposUsuario(): TipoUsuario[] {
     return this.tiposUsuario;
+  }
+
+  public DefinirAvatar($event) {
+    this.sService.uploadFileOnEvent($event);
+    this.sService.uploadPercent.subscribe({
+      next(data) { console.log('porcentaje: ' + data); }
+    });
+    this.sService.downloadURL.subscribe(url => this.profileUrl = url);
   }
 
   ngOnInit() {

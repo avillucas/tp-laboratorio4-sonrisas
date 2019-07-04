@@ -81,10 +81,9 @@ service cloud.firestore {
 }
 
 #DEPLOY 
-firebase deploy --only hosting:tpsonrisas
-firebase login
-firebase init
+cp -R dist/parcial2/* firebase/public/; cd firebase ; firebase deploy ; 
 
+Hosting URL: https://sonrisastp-8a3c9.firebaseapp.com
 
 {
   "hosting": {
