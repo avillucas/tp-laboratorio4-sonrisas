@@ -6,10 +6,11 @@ import { IUsuario } from '../models/usuario.model';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { IUsuarioId } from '../models/usuarioid.model';
-import { Profesor } from '../clases/profesor';
-import { Alumno } from '../clases/alumno';
-import { Administrador } from '../clases/administrador';
 import { TipoUsuario } from '../enums/tipo-usuario.enum';
+import { Administrador } from '../clases/administrador';
+import { Especialista } from '../clases/especialista';
+import { Recepcionista } from '../clases/recepcionista';
+import { Cliente } from '../clases/clientes';
 
 @Injectable({
   providedIn: 'root'
@@ -29,17 +30,11 @@ export class UsuariosService {
   }
 
   traerPorTipo(tipo: TipoUsuario): Observable<IUsuarioId[]> {
-    let collection: AngularFirestoreCollection<IUsuario>;
-    // tslint:disable-next-line:triple-equals
-    if (tipo == TipoUsuario.profesor) {
-      collection = this.afs.collection(environment.db.usuarios, ref => ref.where('profesor', '==', true));
-      // tslint:disable-next-line:triple-equals
-    } else if (tipo == TipoUsuario.admin) {
-      collection = this.afs.collection(environment.db.usuarios, ref => ref.where('admin', '==', true));
-    } else {
-      collection = this.afs.collection(environment.db.usuarios, ref => ref.where('admin', '==', false));
-    }
-    return this.makeObservable(collection);
+    // tslint:disable-next-line: radix
+    const tipoNro = parseInt(tipo.toString());
+    // tslint:disable-next-line:max-line-length
+    const colection: AngularFirestoreCollection<IUsuario> = this.afs.collection(environment.db.usuarios, ref => ref.where('tipo', '==', tipoNro));
+    return this.makeObservable(colection);
   }
 
   private makeObservable(collection: AngularFirestoreCollection<IUsuario>) {
@@ -58,9 +53,9 @@ export class UsuariosService {
     return this.makeObservable(this.collection);
   }
 
-  crear(usuario: Usuario) {
-    const imateria = this.DAOData(usuario);
-    return this.collection.add(imateria);
+  crear(usuario: Usuario, UID: string) {
+    const iusuario = this.DAOData(usuario);
+    return this.collection.doc(UID).set(iusuario);
   }
 
   borrar(id: string) {
@@ -73,29 +68,34 @@ export class UsuariosService {
     return userRef.set(imateria, { merge: true });
   }
 
+
   DAOData(usuario: Usuario): IUsuario {
     return {
+      email: usuario.Email,
       nombre: usuario.Nombre,
-      profesor: usuario.IsProfesor,
-      admin: usuario.IsAdmin,
-      email: usuario.Email
+      tipo: usuario.Tipo
     };
   }
 
   DataDAO(iusuario: IUsuario): Usuario {
-    let usuario: Usuario;
-    if (iusuario.profesor) {
-      usuario = new Profesor(iusuario.email, iusuario.nombre);
-    } else if (iusuario.admin) {
-      usuario = new Administrador(iusuario.email, iusuario.nombre);
-    } else {
-      usuario = new Alumno(iusuario.email, iusuario.nombre);
+    // tslint:disable-next-line: triple-equals
+    if (iusuario.tipo == TipoUsuario.administrador) {
+      return new Administrador(iusuario.email, iusuario.nombre);
+      // tslint:disable-next-line: triple-equals
+    } else if (iusuario.tipo == TipoUsuario.especialista) {
+      // tslint:disable-next-line: triple-equals
+      return new Especialista(iusuario.email, iusuario.nombre);
+      // tslint:disable-next-line: triple-equals
+    } else if (iusuario.tipo == TipoUsuario.recepcionista) {
+      return new Recepcionista(iusuario.email, iusuario.nombre);
+      // tslint:disable-next-line: triple-equals
+    } else if (iusuario.tipo == TipoUsuario.cliente) {
+      return new Cliente(iusuario.email, iusuario.nombre);
     }
-    return usuario;
   }
 
   async traerPorUID(UID: string) {
-    const userRef: AngularFirestoreDocument<IUsuario> = this.afs.doc(`${environment.db.usuarios} /${UID}`);
+    const userRef: AngularFirestoreDocument<IUsuario> = this.afs.collection(environment.db.usuarios).doc(UID);
     return await userRef.get().subscribe(doc => {
       if (doc.exists) {
         return this.DataDAO(doc.data() as IUsuario);

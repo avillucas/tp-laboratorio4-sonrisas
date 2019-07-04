@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { TipoUsuario } from 'src/app/enums/tipo-usuario.enum';
 
 
 @Component({
@@ -13,8 +14,10 @@ export class UsuariosFiltrosComponent implements OnInit {
 
   public TipoControl: FormControl;
   public FiltroForm: FormGroup;
+  private tiposUsuario: TipoUsuario[];
 
   constructor(private builder: FormBuilder) {
+    this.tiposUsuario = [TipoUsuario.administrador, TipoUsuario.especialista, TipoUsuario.recepcionista, TipoUsuario.cliente];
     this.TipoControl = new FormControl(this.TipoControl, [
       Validators.required
     ]);
@@ -35,6 +38,10 @@ export class UsuariosFiltrosComponent implements OnInit {
 
   ngOnInit() {
     this.TipoInput.setValue(0);
+  }
+
+  public get TiposUsuario(): TipoUsuario[] {
+    return this.tiposUsuario;
   }
 
 }

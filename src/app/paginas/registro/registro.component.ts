@@ -4,9 +4,9 @@ import { AuthService } from '../../servicios/auth.service';
 import { Router } from '@angular/router';
 import { Usuario } from 'src/app/clases/usuario';
 import { TipoUsuario } from 'src/app/enums/tipo-usuario.enum';
-import { Profesor } from 'src/app/clases/profesor';
 import { Administrador } from 'src/app/clases/administrador';
-import { Alumno } from 'src/app/clases/alumno';
+import { UsuariosService } from 'src/app/servicios/usuarios.service';
+import { IUsuario } from 'src/app/models/usuario.model';
 
 @Component({
   selector: 'app-registro',
@@ -20,25 +20,27 @@ export class RegistroComponent implements OnInit {
   public PasswordControl: FormControl;
   public TipoControl: FormControl;
   public RegistroForm: FormGroup;
+  private tiposUsuario: TipoUsuario[];
 
 
-  constructor(private builder: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private builder: FormBuilder, private authService: AuthService, private router: Router, private uService: UsuariosService) {
+    this.tiposUsuario = [TipoUsuario.administrador, TipoUsuario.especialista, TipoUsuario.recepcionista, TipoUsuario.cliente];
     this.NombreControl = new FormControl(this.NombreControl, [
       Validators.required,
-      Validators.minLength(1),
+      Validators.minLength(4),
       Validators.maxLength(255)
     ]);
 
     this.EmailControl = new FormControl(this.EmailControl, [
       Validators.required,
       Validators.email,
-      Validators.minLength(1),
+      Validators.minLength(4),
       Validators.maxLength(255)
     ]);
 
     this.PasswordControl = new FormControl(this.PasswordControl, [
       Validators.required,
-      Validators.minLength(1),
+      Validators.minLength(4),
       Validators.maxLength(255)
     ]);
 
@@ -71,15 +73,8 @@ export class RegistroComponent implements OnInit {
   }
 
   private crear(email: string, nombre: string, tipo: TipoUsuario): Usuario {
-    // tslint:disable-next-line:triple-equals
-    if (tipo == TipoUsuario.profesor) {
-      return new Profesor(email, nombre);
-      // tslint:disable-next-line:triple-equals
-    } else if (tipo == TipoUsuario.admin) {
-      return new Administrador(email, nombre);
-    } else {
-      return new Alumno(email, nombre);
-    }
+    return this.uService.DataDAO({ email, nombre, tipo } as IUsuario
+    );
   }
 
   Registrar() {
@@ -92,6 +87,9 @@ export class RegistroComponent implements OnInit {
     );
   }
 
+  public get TiposUsuario(): TipoUsuario[] {
+    return this.tiposUsuario;
+  }
 
   ngOnInit() {
     this.TipoInput.setValue(0);

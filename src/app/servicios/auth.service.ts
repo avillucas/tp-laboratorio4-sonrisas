@@ -53,8 +53,8 @@ export class AuthService {
    */
   async clienteSingIn(usuario: Usuario, password: string) {
     const credential = await this.afAuth.auth.createUserWithEmailAndPassword(usuario.Email, password);
-    usuario.UID = credential.user.uid;
-    return this.uService.crear(usuario);
+    const UID = credential.user.uid;
+    return this.uService.crear(usuario, UID);
   }
 
   get CurrentUID(): string {

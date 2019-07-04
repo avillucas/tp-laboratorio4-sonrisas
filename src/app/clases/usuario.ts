@@ -1,14 +1,6 @@
-import { IUsuario } from '../models/usuario.model';
-import { environment } from 'src/environments/environment';
 import { TipoUsuario } from '../enums/tipo-usuario.enum';
-import { IPersistible } from '../servicios/ipersistible.model';
-import { Administrador } from './administrador';
-import { Recepcionista } from './recepcionista';
-import { Cliente } from './clientes';
-import { Especialista } from './especialista';
 
-export abstract class Usuario implements IPersistible {
-  private uid: string;
+export abstract class Usuario {
   private email: string;
   private nombre: string;
   private tipo: TipoUsuario;
@@ -20,18 +12,22 @@ export abstract class Usuario implements IPersistible {
   }
 
   public get esAdministrador(): boolean {
+    // tslint:disable-next-line: triple-equals
     return this.tipo == TipoUsuario.administrador;
   }
 
   public get esEspecialista(): boolean {
+    // tslint:disable-next-line: triple-equals
     return this.tipo == TipoUsuario.especialista;
   }
 
   public get esRecepcionista(): boolean {
+    // tslint:disable-next-line: triple-equals
     return this.tipo == TipoUsuario.recepcionista;
   }
 
   public get esCliente(): boolean {
+    // tslint:disable-next-line: triple-equals
     return this.tipo == TipoUsuario.cliente;
   }
 
@@ -54,26 +50,5 @@ export abstract class Usuario implements IPersistible {
   public get Tipo(): TipoUsuario {
     return this.tipo;
   }
-
-  DAOData(usuario: Usuario): IUsuario {
-    return {
-      email: usuario.email,
-      nombre: usuario.nombre,
-      tipo: usuario.tipo
-    };
-  }
-
-  DataDAO(iusuario: IUsuario): Usuario {
-    if (iusuario.tipo == TipoUsuario.administrador) {
-      return new Administrador(iusuario.email, iusuario.nombre);
-    } else if (iusuario.tipo == TipoUsuario.especialista) {
-      return new Especialista(iusuario.email, iusuario.nombre);
-    } else if (iusuario.tipo == TipoUsuario.recepcionista) {
-      return new Recepcionista(iusuario.email, iusuario.nombre);
-    } else if (iusuario.tipo == TipoUsuario.cliente) {
-      return new Cliente(iusuario.email, iusuario.nombre);
-    }
-  }
-
 
 }

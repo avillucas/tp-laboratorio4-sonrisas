@@ -11,35 +11,38 @@
       <div class="form-group has-feedback">
         <input type="text" class="form-control" placeholder="Nombre"  [formControl]="NombreControl" name="nombre" >
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        <div *ngIf="NombreInput.invalid && (NombreInput.dirty || NombreInput.touched)" class="alert alert-danger">
+            <div *ngIf="NombreInput.hasError('required')">Complete con un nombre </div>
+            <div *ngIf="NombreInput.hasError('minlength')">Debe tener al menos  4 caracteres</div>
+            <div *ngIf="NombreInput.hasError('maxlength')">Debe tener maximo 255 caracteres</div>
+          </div>
       </div>
       <div class="form-group has-feedback">
         <input type="email" class="form-control" placeholder="Email"  [formControl]="EmailControl" name="email" >
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         <div *ngIf="EmailInput.invalid && (EmailInput.dirty || EmailInput.touched)" class="alert alert-danger">
-          <div *ngIf="EmailInput.errors.required">Complete con un email </div>
-          <div *ngIf="EmailInput.errors.minlength">Debe tener al menos  4 caracteres</div>
-          <div *ngIf="EmailInput.errors.maxlength">Debe tener maximo 255 caracteres</div>
-          <div *ngIf="EmailInput.errors.pattern">Formato de email valido</div>
+          <div *ngIf="EmailInput.hasError('required')">Complete con un email </div>
+          <div *ngIf="EmailInput.hasError('minlength')">Debe tener al menos  4 caracteres</div>
+          <div *ngIf="EmailInput.hasError('maxlength')">Debe tener maximo 255 caracteres</div>
+          <div *ngIf="EmailInput.hasError('pattern')">Formato de email valido</div>
         </div>
       </div>
       <div class="form-group has-feedback">
         <input type="password" class="form-control" placeholder="Password"name="password"  [formControl]="PasswordControl" required>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         <div *ngIf="PasswordInput.invalid && (PasswordInput.dirty || PasswordInput.touched)" class="alert alert-danger">
-          <div *ngIf="PasswordInput.errors.required">Complete con un pasword </div>
-          <div *ngIf="PasswordInput.errors.minlength">Debe tener al menos  4 caracteres</div>
-          <div *ngIf="PasswordInput.errors.maxlength">Debe tener maximo 255 caracteres</div>
+          <div *ngIf="PasswordInput.hasError('required')">Complete con un pasword </div>
+          <div *ngIf="PasswordInput.hasError('minlength')">Debe tener al menos  4 caracteres</div>
+          <div *ngIf="PasswordInput.hasError('maxlength')">Debe tener maximo 255 caracteres</div>
         </div>
       </div>
       <div class="form-group has-feedback">
         <span class="glyphicon glyphicon-lock form-control-feedback">Tipo de Usuario</span>
         <select  name="tipo" [formControl]="TipoControl" >
-          <option value="0" selected="selected">Alumno</option>
-          <option value="1">Profesor</option>
-          <option value="2">Administrador</option>
+            <option *ngFor="let tipoUsuario of TiposUsuario " [value]="tipoUsuario">{{ tipoUsuario | tipousuario }}</option>
         </select>
         <div *ngIf="TipoInput.invalid && (TipoInput.dirty || TipoInput.touched)" class="alert alert-danger">
-          <div *ngIf="TipoInput.errors.required">Complete con un tipo </div>
+          <div *ngIf="TipoInput.hasError('required')">Seleccione un tipo de usuario</div>
         </div>
       </div>
       <!--

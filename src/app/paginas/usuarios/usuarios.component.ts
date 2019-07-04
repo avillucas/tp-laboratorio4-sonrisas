@@ -25,7 +25,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.usuariosFiltrados = this.uService.traerPorTipo(TipoUsuario.alumno);
+    this.usuariosFiltrados = this.uService.traerPorTipo(TipoUsuario.cliente);
   }
 
 }

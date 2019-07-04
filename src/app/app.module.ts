@@ -23,14 +23,10 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ProfileComponent } from './paginas/profile/profile.component';
 import { UsuariosService } from './servicios/usuarios.service';
-import { ChatComponent } from './paginas/chat/chat.component';
-import { MateriasComponent } from './paginas/materias/materias.component';
-import { MateriasListaComponent } from './paginas/materias-lista/materias-lista.component';
-import { MateriasCrearComponent } from './paginas/materias-crear/materias-crear.component';
 import { UsuariosFiltrosComponent } from './paginas/usuarios-filtros/usuarios-filtros.component';
 import { UsuariosComponent } from './paginas/usuarios/usuarios.component';
 import { UsuariosListaComponent } from './paginas/usuarios-lista/usuarios-lista.component';
-import { PorCupoDirective } from './directivas/por-cupo.directive';
+import { TipousuarioPipe } from './pipes/tipousuario.pipe';
 
 @NgModule({
   declarations: [
@@ -42,14 +38,10 @@ import { PorCupoDirective } from './directivas/por-cupo.directive';
     NotfoundComponent,
     TemplateComponent,
     ProfileComponent,
-    ChatComponent,
-    MateriasComponent,
-    MateriasListaComponent,
-    MateriasCrearComponent,
     UsuariosFiltrosComponent,
     UsuariosComponent,
     UsuariosListaComponent,
-    PorCupoDirective,
+    TipousuarioPipe,
   ],
   imports: [
     BrowserModule,
