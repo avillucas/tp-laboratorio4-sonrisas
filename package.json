@@ -1,6 +1,6 @@
 {
-  "name": "parcial2",
-  "version": "0.0.0",
+  "name": "sonrisastp",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
