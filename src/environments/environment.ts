@@ -26,6 +26,17 @@ export const environment = {
   },
   storage: {
     profileFolder: 'profile'
+  },
+  clinica: {
+    tiempoMinimoConsulta: 15,
+    lav: {
+      inicio: 8,
+      fin: 19,
+    },
+    sab: {
+      inicio: 8,
+      fin: 14,
+    }
   }
 };
 

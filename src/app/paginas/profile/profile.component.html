@@ -6,7 +6,15 @@
             <!---->
             <!---->
             <!---->
-            <a><img alt="*" class="user-image" src="{{ usuario.profileImage }}" ><span class="hidden-xs">{{ usuario.nombre }} ({{ usuario.email }}) </span></a>
+            <a>
+                <img alt="*" class="user-image" src="{{ usuario.profileImage }}" >
+                <span class="hidden-xs">{{ usuario.nombre }} ({{ usuario.email }}) </span>
+                &nbsp;
+                &nbsp;
+                 <i _ngcontent-gmd-c4="" (click)="CerrarSesion()" class="fa fa-sign-out"></i>
+            </a>
+
+
             <!---->
             <!---->
             <!---->

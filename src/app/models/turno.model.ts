@@ -1,6 +1,7 @@
+import { Time } from '@angular/common';
+
 export interface ITurno {
-  profileImage?: string;
-  time: string;
-  paciente: any;
-  veterinario: any;
+  time: Date;
+  especialistaNombre: string;
+  clienteNombre: string;
 }

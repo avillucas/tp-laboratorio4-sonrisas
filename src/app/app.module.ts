@@ -28,6 +28,8 @@ import { UsuariosComponent } from './paginas/usuarios/usuarios.component';
 import { UsuariosListaComponent } from './paginas/usuarios-lista/usuarios-lista.component';
 import { TipousuarioPipe } from './pipes/tipousuario.pipe';
 import { TurnosComponent } from './paginas/turnos/turnos.component';
+import { TurnosTablaComponent } from './paginas/turnos-tabla/turnos-tabla.component';
+import { TurnosFiltroComponent } from './paginas/turnos-filtro/turnos-filtro.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { TurnosComponent } from './paginas/turnos/turnos.component';
     UsuariosListaComponent,
     TipousuarioPipe,
     TurnosComponent,
+    TurnosTablaComponent,
+    TurnosFiltroComponent,
   ],
   imports: [
     BrowserModule,
