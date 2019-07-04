@@ -80,17 +80,17 @@ export class UsuariosService {
   DataDAO(iusuario: IUsuario): Usuario {
     // tslint:disable-next-line: triple-equals
     if (iusuario.tipo == TipoUsuario.administrador) {
-      return new Administrador(iusuario.email, iusuario.nombre);
+      return new Administrador(iusuario.email, iusuario.nombre, iusuario.profileImage);
       // tslint:disable-next-line: triple-equals
     } else if (iusuario.tipo == TipoUsuario.especialista) {
       // tslint:disable-next-line: triple-equals
-      return new Especialista(iusuario.email, iusuario.nombre);
+      return new Especialista(iusuario.email, iusuario.nombre, iusuario.profileImage);
       // tslint:disable-next-line: triple-equals
     } else if (iusuario.tipo == TipoUsuario.recepcionista) {
-      return new Recepcionista(iusuario.email, iusuario.nombre);
+      return new Recepcionista(iusuario.email, iusuario.nombre, iusuario.profileImage);
       // tslint:disable-next-line: triple-equals
     } else if (iusuario.tipo == TipoUsuario.cliente) {
-      return new Cliente(iusuario.email, iusuario.nombre);
+      return new Cliente(iusuario.email, iusuario.nombre, iusuario.profileImage);
     }
   }
 

@@ -1,7 +1,31 @@
-<!-- User logged in -->
-<div *ngIf="authService.user$ | async as usuario">
-    <h3>Hola, {{ usuario.nombre }}</h3>
-    <p>Email: {{ usuario.email }}</p>
-    <img *ngIf="usuario.profileImage" src="{{ usuario.profileImage }}" alt="" style="width:100%"/>
-    <button (click)="CerrarSesion()">Cerrar Sesion</button>
+<div class="navbar-custom-menu">
+    <ul class="nav navbar-nav">
+        <li *ngIf="authService.user$ | async as usuario" class="user user-menu" mk-dropdown="" type="list" _nghost-c9="">
+            <!---->
+            <!---->
+            <!---->
+            <!---->
+            <!---->
+            <a><img alt="*" class="user-image" src="{{ usuario.profileImage }}" ><span class="hidden-xs">{{ usuario.nombre }} ({{ usuario.email }}) </span></a>
+            <!---->
+            <!---->
+            <!---->
+            <ul _ngcontent-c9="" class="dropdown-menu collapsing" style="display: none;">
+                <!---->
+                <!---->
+                <li class="user-header"><img alt="User Image" class="img-circle" src="{{ usuario.profileImage }}">
+                    <p> {{ usuario.nombre }} <small>{{ usuario.email }}</small></p>
+                </li>
+                <li class="user-footer">
+                    <div class="pull-left"><a class="btn btn-default btn-flat" ngRoute="/Profile">Mi Cuenta</a></div>
+                    <div class="pull-right"><a class="btn btn-default btn-flat"  (click)="CerrarSesion()" >Cerrar Sesión</a></div>
+                </li>
+                <!---->
+                <!---->
+                <!---->
+            </ul>
+            <!---->
+            <!---->
+        </li>
+    </ul>
 </div>

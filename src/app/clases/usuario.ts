@@ -4,11 +4,13 @@ export abstract class Usuario {
   private email: string;
   private nombre: string;
   private tipo: TipoUsuario;
+  private profileImage: string;
 
-  constructor(email: string, nombre: string, tipo: TipoUsuario) {
+  constructor(email: string, nombre: string, tipo: TipoUsuario, profileImage: string) {
     this.email = email;
     this.nombre = nombre;
     this.tipo = tipo;
+    this.profileImage = profileImage;
   }
 
   public get esAdministrador(): boolean {
@@ -49,6 +51,14 @@ export abstract class Usuario {
 
   public get Tipo(): TipoUsuario {
     return this.tipo;
+  }
+
+  public get ProfileImage(): string {
+    return this.profileImage;
+  }
+
+  public set ProfileImage(value: string) {
+    this.profileImage = value;
   }
 
 }

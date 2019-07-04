@@ -27,6 +27,7 @@ import { UsuariosFiltrosComponent } from './paginas/usuarios-filtros/usuarios-fi
 import { UsuariosComponent } from './paginas/usuarios/usuarios.component';
 import { UsuariosListaComponent } from './paginas/usuarios-lista/usuarios-lista.component';
 import { TipousuarioPipe } from './pipes/tipousuario.pipe';
+import { TurnosComponent } from './paginas/turnos/turnos.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { TipousuarioPipe } from './pipes/tipousuario.pipe';
     UsuariosComponent,
     UsuariosListaComponent,
     TipousuarioPipe,
+    TurnosComponent,
   ],
   imports: [
     BrowserModule,

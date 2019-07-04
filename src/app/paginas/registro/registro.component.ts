@@ -23,7 +23,7 @@ export class RegistroComponent implements OnInit {
   public RegistroForm: FormGroup;
   private tiposUsuario: TipoUsuario[];
 
-  private profileUrl: string;
+  private profileImage: string;
 
   constructor(
     private builder: FormBuilder,
@@ -88,13 +88,13 @@ export class RegistroComponent implements OnInit {
     return this.RegistroForm.get('avatar');
   }
 
-  private crear(email: string, nombre: string, tipo: TipoUsuario): Usuario {
-    return this.uService.DataDAO({ email, nombre, tipo } as IUsuario
+  private crear(email: string, nombre: string, tipo: TipoUsuario, profileImage: string): Usuario {
+    return this.uService.DataDAO({ email, nombre, tipo, profileImage } as IUsuario
     );
   }
 
   Registrar() {
-    const usuario: Usuario = this.crear(this.EmailInput.value, this.NombreInput.value, this.TipoInput.value);
+    const usuario: Usuario = this.crear(this.EmailInput.value, this.NombreInput.value, this.TipoInput.value, this.profileImage);
     this.authService.clienteSingIn(usuario, this.PasswordInput.value).then(res => {
       this.router.navigate(['']);
     }, err => {
@@ -112,7 +112,7 @@ export class RegistroComponent implements OnInit {
     this.sService.uploadPercent.subscribe({
       next(data) { console.log('porcentaje: ' + data); }
     });
-    this.sService.downloadURL.subscribe(url => this.profileUrl = url);
+    this.sService.downloadURL.subscribe(url => this.profileImage = url);
   }
 
   ngOnInit() {

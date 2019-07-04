@@ -14,12 +14,14 @@ export class IsAdminGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return this.auth.user$.pipe(
       map(user => {
+        // tslint:disable-next-line: radix
+        const nTipo: number = parseInt(user.tipo.toString());
         // tslint:disable-next-line: triple-equals
-        if (user.tipo == TipoUsuario.administrador) {
-          this.router.navigate(['/']);
-          return false;
+        if (nTipo === TipoUsuario.administrador) {
+          return true;
         }
-        return true;
+        this.router.navigate(['/']);
+        return false;
       }
       )
     );
