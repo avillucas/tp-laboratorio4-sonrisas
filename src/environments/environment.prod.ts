@@ -1,3 +1,4 @@
+
 export const environment = {
   production: true,
   firebase: {
@@ -5,7 +6,7 @@ export const environment = {
     authDomain: 'sonrisastp-8a3c9.firebaseapp.com',
     databaseURL: 'https://sonrisastp-8a3c9.firebaseio.com',
     projectId: 'sonrisastp-8a3c9',
-    storageBucket: '',
+    storageBucket: 'gs://sonrisastp-8a3c9.appspot.com',
     messagingSenderId: '202373428554',
     appId: '1:202373428554:web:7b80147a04a39969'
   },
@@ -19,5 +20,19 @@ export const environment = {
     usuarios: 'usuarios',
     encuestas: 'encuestas',
     turnos: 'turnos'
+  },
+  storage: {
+    profileFolder: 'profile'
+  },
+  clinica: {
+    tiempoMinimoConsulta: 15,
+    lav: {
+      inicio: 8,
+      fin: 19,
+    },
+    sab: {
+      inicio: 8,
+      fin: 14,
+    }
   }
 };
