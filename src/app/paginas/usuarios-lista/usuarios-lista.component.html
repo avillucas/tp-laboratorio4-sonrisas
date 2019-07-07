@@ -4,6 +4,7 @@
     <th>Tipo</th>
     <th>Nombre</th>
     <th>Email</th>
+    <th>Acciones</th>
   </thead>
   <tbody>
     <tr *ngFor="let usu of Usuarios| async">
@@ -11,6 +12,10 @@
       <td>{{ usu.usuario.Tipo | tipousuario }}</td>
       <td>{{ usu.usuario.Nombre }}</td>
       <td>{{ usu.usuario.Email }}</td>
+      <td>
+        <button (click)="Borrar(usu)">Borrar</button>
+        <button  routerLink="/especialistas-horarios">Cargar Días laborables</button>
+      </td>
     </tr>
   </tbody>
 </table>

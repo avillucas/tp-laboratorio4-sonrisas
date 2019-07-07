@@ -1,6 +1,6 @@
 import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
-import { AngularFirestoreDocument, AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestoreDocument, AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/firestore';
 import { Usuario } from '../clases/usuario';
 import { IUsuario } from '../models/usuario.model';
 import { map } from 'rxjs/operators';
@@ -11,6 +11,7 @@ import { Administrador } from '../clases/administrador';
 import { Especialista } from '../clases/especialista';
 import { Recepcionista } from '../clases/recepcionista';
 import { Cliente } from '../clases/clientes';
+import { ITurno } from '../models/turno.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +25,6 @@ export class UsuariosService {
   constructor(private afs: AngularFirestore) {
     this.collection = this.afs.collection(environment.db.usuarios);
   }
-
-
-
 
   static DAOData(usuario: Usuario): IUsuario {
     return {
@@ -76,7 +74,7 @@ export class UsuariosService {
 
   private makeObservable(document: AngularFirestoreDocument<IUsuario>) {
     return document.snapshotChanges().pipe(
-      map( a  => {
+      map(a => {
         return this.usuarioAUsuarioId(a);
       }));
   }
@@ -85,7 +83,7 @@ export class UsuariosService {
     const iusuario = a.payload.doc.data() as IUsuario;
     const usuario = UsuariosService.DataDAO(iusuario);
     const id = a.payload.doc.id;
-console.info(a);
+    console.info(a);
 
     return { id, usuario } as IUsuarioId;
   }
@@ -100,6 +98,7 @@ console.info(a);
   }
 
   borrar(id: string) {
+    // TODO eliminar tambien la relacion con las demas cosas y la relacion con el auth
     return this.collection.doc(id).delete();
   }
 
@@ -120,6 +119,13 @@ console.info(a);
   traerPorUID(UID: string) {
     const collection: AngularFirestoreDocument<IUsuario> = this.afs.collection(environment.db.usuarios).doc(UID);
     return this.makeObservable(collection);
+  }
+
+  agregarTurnosAEspecialista(especialistaUID: string, turnos: Array<ITurno>) {
+    turnos.forEach(iturno => {
+      const turnoRef = this.collection.doc(especialistaUID).collection('turnos').add(iturno);
+    });
+
   }
 
 }

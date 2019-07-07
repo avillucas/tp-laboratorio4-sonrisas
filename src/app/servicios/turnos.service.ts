@@ -14,6 +14,8 @@ import { Administrador } from '../clases/administrador';
 import { Especialista } from '../clases/especialista';
 import { Recepcionista } from '../clases/recepcionista';
 import { Cliente } from '../clases/clientes';
+import { Helpers } from '../clases/helpers';
+import { IRangoHorario } from '../models/rangohorario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,31 +35,37 @@ export class TurnosService {
 
   static DAOData(turno: Turno): ITurno {
     return {
-      time: turno.Time,
-      especialistaUID: 'xxxxxxxxx', // TODO turno.Especialista.ID,
-      especialistaNombre: turno.Especialista.Nombre,
-      clienteUID: 'xxxxxxxxx', // TODO turno.Especialista.ID,
-      clienteNombre: turno.Cliente.Nombre,
+      time: turno.Time
     };
   }
+  /*
+    static DataDAO(iturno: ITurno): Turno {
+      // TODO no se como sacar esto
+      const especialista = new Especialista('asdasdasd', 'xxxx', 'asdads');
+      // TODO no se como sacar esto
+      const cliente = new Cliente('asdasdasd', 'xxxx', 'asdads');
+      return new Turno(iturno.time, especialista, cliente);
+    }
+  */
 
-  static DataDAO(iturno: ITurno): Turno {
-    // TODO no se como sacar esto
-    const especialista = new Especialista(iturno.especialistaNombre, 'xxxx', 'asdads');
-    // TODO no se como sacar esto
-    const cliente = new Cliente(iturno.clienteNombre, 'xxxx', 'asdads');
-    return new Turno(iturno.time, especialista, cliente);
+  static generarTurnosDisponiblesTodoElDia(dia: Date): Array<ITurno> {
+
+
+    // clonar la fecha para que no se aplique por referencia sobre la ingresada
+    const aux = new Date(dia);
+    const rangoHorario: IRangoHorario = Helpers.traerRangoHorario(aux);
+    const time: Date = new Date(rangoHorario.inicio);
+    const turnos: Array<ITurno> = new Array<ITurno>();
+    const TiempoMinimoConsulta = environment.clinica.tiempoMinimoConsulta;
+    do {
+      const nTime = new Date(time);
+      const turno = { time: nTime } as ITurno;
+      turnos.push(turno);
+      time.setMinutes(time.getMinutes() + TiempoMinimoConsulta, 0, 0);
+    } while (time <= rangoHorario.fin);
+    return turnos;
   }
-
-/*
-  traerTurnos(especialistaUID: string): Observable<ITurno[]> {
-    return this.afs.collection(environment.db.usuarios)
-      .doc<IUsuario>(especialistaUID)
-      .collection<ITurno>('turnos')
-      .valueChanges();
-  }
-*/
-
+  /*
   traerPorDia(diaConsultado: Date): Observable<ITurnoId[]> {
     const inicioBusqueda: Date = new Date(diaConsultado);
     const finBusqueda: Date = new Date(diaConsultado);
@@ -68,7 +76,7 @@ export class TurnosService {
     );
     return this.makeObservable(colection);
   }
-
+*/
   traerPorDiaEspecialista(diaConsultado: Date, especialistaUID: string): Observable<ITurnoId[]> {
     const inicioBusqueda: Date = new Date(diaConsultado);
     const finBusqueda: Date = new Date(diaConsultado);
@@ -90,9 +98,9 @@ export class TurnosService {
       map(actions => {
         return actions.map(a => {
           const iturno = a.payload.doc.data() as ITurno;
-          const turno = TurnosService.DataDAO(iturno);
+          //  const turno = TurnosService.DataDAO(iturno);
           const id = a.payload.doc.id;
-          return { id, turno } as ITurnoId;
+          return { id, turno: iturno } as ITurnoId;
         });
       }));
   }

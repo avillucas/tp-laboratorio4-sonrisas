@@ -22,7 +22,12 @@ export const environment = {
   db: {
     usuarios: 'usuarios',
     encuestas: 'encuestas',
-    turnos: 'turnos'
+    turnos: 'turnos',
+  },
+  collections: {
+    usuarios: {
+      turnos: 'turnos'
+    }
   },
   storage: {
     profileFolder: 'profile'

@@ -30,6 +30,7 @@ import { TipousuarioPipe } from './pipes/tipousuario.pipe';
 import { TurnosComponent } from './paginas/turnos/turnos.component';
 import { TurnosTablaComponent } from './paginas/turnos-tabla/turnos-tabla.component';
 import { TurnosFiltroComponent } from './paginas/turnos-filtro/turnos-filtro.component';
+import { EspecialistasLaboralesComponent } from './paginas/especialistas-laborales/especialistas-laborales.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { TurnosFiltroComponent } from './paginas/turnos-filtro/turnos-filtro.com
     TurnosComponent,
     TurnosTablaComponent,
     TurnosFiltroComponent,
+    EspecialistasLaboralesComponent,
   ],
   imports: [
     BrowserModule,

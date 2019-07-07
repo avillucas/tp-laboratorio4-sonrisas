@@ -65,6 +65,14 @@ export class AuthService {
     return this.user$.pipe(first()).toPromise();
   }
 
+  borrarEsteUsuario(){
+    //https://firebase.google.com/docs/auth/web/manage-users?hl=es-419
+    this.afAuth.auth.currentUser.delete().then(function () {
+      console.info('borrado');
+    }).catch(function (error) {
+      console.info('error al borrar');
+    });
+  }
   /**
    * Cerrar sesion del cliente autenticado
    */

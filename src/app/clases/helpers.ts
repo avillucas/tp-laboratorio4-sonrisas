@@ -16,8 +16,8 @@ export class Helpers {
       // domingo
       throw new Error('No es posible asignar turnos ya que la clinica no trabaja los domingos');
     }
-    const fin: Date = new Date();
-    const inicio: Date = new Date();
+    const fin: Date = new Date(dia);
+    const inicio: Date = new Date(dia);
     if (dia.getDay() === 5) {
       // sabado
       inicio.setHours(environment.clinica.sab.inicio, 0, 0, 0);
