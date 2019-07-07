@@ -89,7 +89,7 @@ export class RegistroComponent implements OnInit {
   }
 
   private crear(email: string, nombre: string, tipo: TipoUsuario, profileImage: string): Usuario {
-    return this.uService.DataDAO({ email, nombre, tipo, profileImage } as IUsuario
+    return UsuariosService.DataDAO({ email, nombre, tipo, profileImage } as IUsuario
     );
   }
 

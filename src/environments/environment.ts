@@ -37,6 +37,11 @@ export const environment = {
       inicio: 8,
       fin: 14,
     }
+  },
+  router: {
+    params: {
+      fechaTurnos: 'fecha'
+    }
   }
 };
 

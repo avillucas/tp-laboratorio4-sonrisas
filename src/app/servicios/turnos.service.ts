@@ -29,6 +29,35 @@ export class TurnosService {
     return this.collection;
   }
 
+
+
+  static DAOData(turno: Turno): ITurno {
+    return {
+      time: turno.Time,
+      especialistaUID: 'xxxxxxxxx', // TODO turno.Especialista.ID,
+      especialistaNombre: turno.Especialista.Nombre,
+      clienteUID: 'xxxxxxxxx', // TODO turno.Especialista.ID,
+      clienteNombre: turno.Cliente.Nombre,
+    };
+  }
+
+  static DataDAO(iturno: ITurno): Turno {
+    // TODO no se como sacar esto
+    const especialista = new Especialista(iturno.especialistaNombre, 'xxxx', 'asdads');
+    // TODO no se como sacar esto
+    const cliente = new Cliente(iturno.clienteNombre, 'xxxx', 'asdads');
+    return new Turno(iturno.time, especialista, cliente);
+  }
+
+/*
+  traerTurnos(especialistaUID: string): Observable<ITurno[]> {
+    return this.afs.collection(environment.db.usuarios)
+      .doc<IUsuario>(especialistaUID)
+      .collection<ITurno>('turnos')
+      .valueChanges();
+  }
+*/
+
   traerPorDia(diaConsultado: Date): Observable<ITurnoId[]> {
     const inicioBusqueda: Date = new Date(diaConsultado);
     const finBusqueda: Date = new Date(diaConsultado);
@@ -40,12 +69,28 @@ export class TurnosService {
     return this.makeObservable(colection);
   }
 
+  traerPorDiaEspecialista(diaConsultado: Date, especialistaUID: string): Observable<ITurnoId[]> {
+    const inicioBusqueda: Date = new Date(diaConsultado);
+    const finBusqueda: Date = new Date(diaConsultado);
+    inicioBusqueda.setHours(0, 0, 0, 0);
+    finBusqueda.setHours(23, 59, 59, 59);
+    //
+    const colection: AngularFirestoreCollection<ITurno> = this.afs.collection(environment.db.usuarios)
+      .doc<IUsuario>(especialistaUID)
+      .collection<ITurno>('turnos', ref => ref
+        .where('time', '>=', inicioBusqueda)
+        .where('time', '<', finBusqueda)
+        .where('especialistaUID', '==', especialistaUID));
+    return this.makeObservable(colection);
+  }
+
+
   private makeObservable(collection: AngularFirestoreCollection<ITurno>) {
     return collection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
           const iturno = a.payload.doc.data() as ITurno;
-          const turno = this.DataDAO(iturno);
+          const turno = TurnosService.DataDAO(iturno);
           const id = a.payload.doc.id;
           return { id, turno } as ITurnoId;
         });
@@ -57,7 +102,7 @@ export class TurnosService {
   }
 
   crear(turno: Turno) {
-    const iturno = this.DAOData(turno);
+    const iturno = TurnosService.DAOData(turno);
     return this.collection.add(iturno);
   }
 
@@ -67,25 +112,8 @@ export class TurnosService {
 
   actualizar(id: string, turno: Turno) {
     const userRef: AngularFirestoreDocument<ITurno> = this.afs.doc(`${environment.db.turnos}/${id}`);
-    const iturno = this.DAOData(turno);
+    const iturno = TurnosService.DAOData(turno);
     return userRef.set(iturno, { merge: true });
-  }
-
-
-  DAOData(turno: Turno): ITurno {
-    return {
-      time: turno.Time,
-      especialistaNombre: turno.Especialista.Nombre,
-      clienteNombre: turno.Cliente.Nombre,
-    };
-  }
-
-  DataDAO(iturno: ITurno): Turno {
-    // TODO no se como sacar esto
-    const especialista = new Especialista(iturno.especialistaNombre, 'xxxx', 'asdads');
-    // TODO no se como sacar esto
-    const cliente = new Cliente(iturno.clienteNombre, 'xxxx', 'asdads');
-    return new Turno(iturno.time, especialista, cliente);
   }
 
 

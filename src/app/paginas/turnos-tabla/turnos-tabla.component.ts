@@ -11,10 +11,8 @@ import { Turno } from 'src/app/clases/turno';
 })
 export class TurnosTablaComponent implements OnInit {
 
-  private dia: TurnoDia;
-  @Input('diaConsultado') diaConsultado: Date;
-  @Input('turnosReservados') turnosReservados: any;
-  @Input('especialista') especialista: Especialista;
+  //  private dia: TurnoDia;
+  @Input('turnosDiaSolicitado') turnosDiaSolicitado: TurnoDia;
   @Output() reservarTurno = new EventEmitter();
   @Output() cancelarTurno = new EventEmitter();
 
@@ -30,13 +28,14 @@ export class TurnosTablaComponent implements OnInit {
   }
 
   public get Dia(): TurnoDia {
-    return this.dia;
+    return this.turnosDiaSolicitado;
+  }
+
+  public get MostrarTabla(): boolean {
+    return !(typeof this.turnosDiaSolicitado === 'undefined');
   }
 
   ngOnInit() {
-    // determinar el dia por input
-    const especialista = new Especialista('asasdasd', 'asdadasd', 'asdasdasd');
-    this.dia = new TurnoDia(this.diaConsultado, this.turnosReservados, especialista);
   }
 
 }

@@ -3,4 +3,8 @@ export interface IUsuario {
   email: string;
   nombre: string;
   tipo: number;
+  // el como cliente
+  turnos?: any;
+  // el como especialista
+
 }

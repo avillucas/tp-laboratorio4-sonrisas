@@ -25,51 +25,10 @@ export class UsuariosService {
     this.collection = this.afs.collection(environment.db.usuarios);
   }
 
-  get Collection(): AngularFirestoreCollection<IUsuario> {
-    return this.collection;
-  }
-
-  traerPorTipo(tipo: TipoUsuario): Observable<IUsuarioId[]> {
-    // tslint:disable-next-line: radix
-    const tipoNro = parseInt(tipo.toString());
-    // tslint:disable-next-line:max-line-length
-    const colection: AngularFirestoreCollection<IUsuario> = this.afs.collection(environment.db.usuarios, ref => ref.where('tipo', '==', tipoNro));
-    return this.makeObservable(colection);
-  }
-
-  private makeObservable(collection: AngularFirestoreCollection<IUsuario>) {
-    return collection.snapshotChanges().pipe(
-      map(actions => {
-        return actions.map(a => {
-          const iusuario = a.payload.doc.data() as IUsuario;
-          const usuario = this.DataDAO(iusuario);
-          const id = a.payload.doc.id;
-          return { id, usuario } as IUsuarioId;
-        });
-      }));
-  }
-
-  get Observable() {
-    return this.makeObservable(this.collection);
-  }
-
-  crear(usuario: Usuario, UID: string) {
-    const iusuario = this.DAOData(usuario);
-    return this.collection.doc(UID).set(iusuario);
-  }
-
-  borrar(id: string) {
-    return this.collection.doc(id).delete();
-  }
-
-  actualizar(id: string, usuario: Usuario) {
-    const userRef: AngularFirestoreDocument<IUsuario> = this.afs.doc(`${environment.db.usuarios}/${id}`);
-    const imateria = this.DAOData(usuario);
-    return userRef.set(imateria, { merge: true });
-  }
 
 
-  DAOData(usuario: Usuario): IUsuario {
+
+  static DAOData(usuario: Usuario): IUsuario {
     return {
       email: usuario.Email,
       nombre: usuario.Nombre,
@@ -77,7 +36,7 @@ export class UsuariosService {
     };
   }
 
-  DataDAO(iusuario: IUsuario): Usuario {
+  static DataDAO(iusuario: IUsuario): Usuario {
     // tslint:disable-next-line: triple-equals
     if (iusuario.tipo == TipoUsuario.administrador) {
       return new Administrador(iusuario.email, iusuario.nombre, iusuario.profileImage);
@@ -94,14 +53,73 @@ export class UsuariosService {
     }
   }
 
-  async traerPorUID(UID: string) {
-    const userRef: AngularFirestoreDocument<IUsuario> = this.afs.collection(environment.db.usuarios).doc(UID);
-    return await userRef.get().subscribe(doc => {
-      if (doc.exists) {
-        return this.DataDAO(doc.data() as IUsuario);
-      }
-      return null;
-    });
+  get Collection(): AngularFirestoreCollection<IUsuario> {
+    return this.collection;
+  }
+
+  traerPorTipo(tipo: TipoUsuario): Observable<IUsuarioId[]> {
+    // tslint:disable-next-line: radix
+    const tipoNro = parseInt(tipo.toString());
+    // tslint:disable-next-line:max-line-length
+    const colection: AngularFirestoreCollection<IUsuario> = this.afs.collection(environment.db.usuarios, ref => ref.where('tipo', '==', tipoNro));
+    return this.makeObservables(colection);
+  }
+
+  private makeObservables(collection: AngularFirestoreCollection<IUsuario>) {
+    return collection.snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          return this.usuarioAUsuarioId(a);
+        });
+      }));
+  }
+
+  private makeObservable(document: AngularFirestoreDocument<IUsuario>) {
+    return document.snapshotChanges().pipe(
+      map( a  => {
+        return this.usuarioAUsuarioId(a);
+      }));
+  }
+
+  private usuarioAUsuarioId(a): IUsuarioId {
+    const iusuario = a.payload.doc.data() as IUsuario;
+    const usuario = UsuariosService.DataDAO(iusuario);
+    const id = a.payload.doc.id;
+console.info(a);
+
+    return { id, usuario } as IUsuarioId;
+  }
+
+  get Observable() {
+    return this.makeObservables(this.collection);
+  }
+
+  crear(usuario: Usuario, UID: string) {
+    const iusuario = UsuariosService.DAOData(usuario);
+    return this.collection.doc(UID).set(iusuario);
+  }
+
+  borrar(id: string) {
+    return this.collection.doc(id).delete();
+  }
+
+  actualizar(id: string, usuario: Usuario) {
+    const userRef: AngularFirestoreDocument<IUsuario> = this.afs.doc(`${environment.db.usuarios}/${id}`);
+    const imateria = UsuariosService.DAOData(usuario);
+    return userRef.set(imateria, { merge: true });
+  }
+
+  traerEspecialistas(): Observable<IUsuarioId[]> {
+    return this.traerPorTipo(TipoUsuario.especialista);
+  }
+
+  traerClientes(): Observable<IUsuarioId[]> {
+    return this.traerPorTipo(TipoUsuario.cliente);
+  }
+
+  traerPorUID(UID: string) {
+    const collection: AngularFirestoreDocument<IUsuario> = this.afs.collection(environment.db.usuarios).doc(UID);
+    return this.makeObservable(collection);
   }
 
 }

@@ -1,4 +1,4 @@
-<table>
+<table *ngIf="MostrarTabla">
     <thead>
       <tr>
       <th>Horario</th>
@@ -12,7 +12,9 @@
         <!-- Horario  mostrar  -->
         <td  class="hora" >{{ turno.Time | date:'HH:mm:ss' }}</td>
         <button  (click)="ReservarTurno(turno)" >Reservar Turno</button>
+        <!--
         <button  (click)="ReservarTurno(turno)" >Cancelar Turno</button>
+        -->
       </tr>
     </tbody>
   </table>
