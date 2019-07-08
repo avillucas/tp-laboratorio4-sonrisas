@@ -1,12 +1,14 @@
+import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { TurnosService } from 'src/app/servicios/turnos.service';
 import { ActivatedRoute } from '@angular/router';
-import { Especialista } from 'src/app/clases/especialista';
-import { IUsuarioId } from '../../models/usuarioid.model';
 import { environment } from '../../../environments/environment';
-import { TurnoDia } from '../../clases/turno-dia';
-import { IUsuario } from '../../models/usuario.model';
 import { UsuariosService } from '../../servicios/usuarios.service';
+import { ITurnoId } from '../../models/turnoid.model';
+import { TurnoDia } from '../../clases/turno-dia';
+import { AuthService } from '../../servicios/auth.service';
+import { IUsuario } from '../../models/usuario.model';
+import { ITurno } from '../../models/turno.model';
 
 @Component({
   selector: 'app-turnos',
@@ -16,61 +18,54 @@ import { UsuariosService } from '../../servicios/usuarios.service';
 export class TurnosComponent implements OnInit {
 
   private diaConsultado: Date;
-  private turnos: any;
-  private especialista: string;
-  private turnosDiaSolicitado: TurnoDia;
-  private sub: any;
+  private turnos: Observable<ITurnoId[]>;
+  private especialistaUID: string;
+  private ocultarSelectorFechas: boolean;
+
 
   constructor(
     private tService: TurnosService,
-    private uService: UsuariosService,
-    private activatedRoute: ActivatedRoute
+    private aService: AuthService
   ) {
+    this.ocultarSelectorFechas = true;
   }
 
-  public get Turnos() {
-    return this.turnos;
+  public get OcultarSelectorFechas(): boolean {
+    return this.ocultarSelectorFechas;
   }
 
   public get DiaConsultado(): Date {
     return this.diaConsultado;
   }
 
-  public get Especialista(): string {
-    return this.especialista;
+  public get EspecialistaUID(): string {
+    return this.especialistaUID;
   }
 
-  public get TurnosDiaSolicitado(): TurnoDia {
-    return this.turnosDiaSolicitado;
+  public get Usuario(): Observable<IUsuario> {
+    return this.aService.user$;
   }
 
-  private generarTurnoDiaSolicitado() {
-    const turnosDelDia = new TurnoDia(this.diaConsultado, this.turnos, this.especialista);
-    this.turnosDiaSolicitado = turnosDelDia;
+  public get Turnos(): Observable<ITurnoId[]> {
+    return this.turnos;
   }
 
-  aplicarFiltros(eventData: any) {
-    //
-    this.diaConsultado = new Date(eventData.fecha);
-    this.especialista = eventData.especialistaUID;
-    this.turnos = this.tService.traerPorDiaEspecialista(this.diaConsultado, this.especialista);
-    console.info(this.turnos);
-    this.generarTurnoDiaSolicitado();
+  public ReservarTurno(iturnoid: ITurnoId) {
+    const iturno = { time: iturnoid.turno.time, clienteUID: this.aService.CurrentUID } as ITurno;
+    this.tService.Reservar(iturnoid.id, iturno, this.especialistaUID);
+  }
+
+  EspecialistaSeleccionado(especialistaUID: string) {
+    this.especialistaUID = especialistaUID;
+  }
+
+  AplicarFiltros(fecha: string) {
+    this.diaConsultado = new Date(fecha + ' 00:00:00');
+    this.turnos = this.tService.traerPorDiaEspecialista(this.diaConsultado, this.especialistaUID);
   }
 
   ngOnInit() {
-    // En caso de que  exista la fecha por url para definir
-    this.sub = this.activatedRoute.params.subscribe(params => {
-      if (typeof params[environment.router.params.fechaTurnos] !== 'undefined') {
-        // TODO enviar esto al filtro para que lo muestre
-        this.diaConsultado = new Date(params[environment.router.params.fechaTurnos]);
-      }
-    });
   }
 
-  // tslint:disable-next-line: use-life-cycle-interface
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
 
 }

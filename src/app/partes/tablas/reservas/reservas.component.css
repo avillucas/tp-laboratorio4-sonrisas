@@ -1,0 +1,27 @@
+
+<table>
+  <title>Turnos Reservados</title>
+
+  <thead>
+    <tr>
+      <th>Horario</th>
+      <th>Paciente</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>  <!-- semana -->
+  <caption>Día {{ Dia | date:'dd-MM-yyyy' }} </caption>
+  <tbody>
+    <tr *ngFor="let iturnoid of Turnos | async ">
+      <!-- Horario  mostrar  -->
+      <td class="hora">{{ iturnoid.turno.time | timestr | date:'HH:mm:ss' }}</td>
+      <td>{{ iturnoid.turno.clienteUID }}</td>
+      <td [ngSwitch]="AccionDisponibleMostrar(iturnoid)">
+        <button *ngSwitchCase="reservar" (click)="MarcarVisita(iturnoid)">Reservar Turno</button>
+        <button *ngSwitchCase="cancelar" (click)="MarcarFalta(iturnoid)">Cancelar Turno</button>
+        <span *ngSwitchDefault class="nodisponible">No Disponible</span>
+      </td>
+    </tr>
+  </tbody>
+
+
+</table>

@@ -7,7 +7,7 @@ export class Turno {
   private especialista: Especialista;
   private cliente: Cliente;
 
-  constructor(time: Date, especialista: Especialista, cliente: Cliente = null) {
+  constructor(time: Date, especialista: Especialista = null, cliente: Cliente = null) {
     this.time = time;
     this.especialista = especialista;
     this.cliente = cliente;

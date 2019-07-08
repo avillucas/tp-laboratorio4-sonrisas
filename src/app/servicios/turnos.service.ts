@@ -31,27 +31,23 @@ export class TurnosService {
     return this.collection;
   }
 
-
+  static estaReservado(iturnoid: ITurnoId): boolean {
+    return (typeof iturnoid.turno.clienteUID !== 'undefined');
+  }
 
   static DAOData(turno: Turno): ITurno {
     return {
       time: turno.Time
     };
   }
-  /*
-    static DataDAO(iturno: ITurno): Turno {
-      // TODO no se como sacar esto
-      const especialista = new Especialista('asdasdasd', 'xxxx', 'asdads');
-      // TODO no se como sacar esto
-      const cliente = new Cliente('asdasdasd', 'xxxx', 'asdads');
-      return new Turno(iturno.time, especialista, cliente);
-    }
-  */
+
+  static DataDAO(iturno: ITurno): Turno {
+    const fecha = iturno.time.toDate();
+    return new Turno(fecha);
+  }
+
 
   static generarTurnosDisponiblesTodoElDia(dia: Date): Array<ITurno> {
-
-
-    // clonar la fecha para que no se aplique por referencia sobre la ingresada
     const aux = new Date(dia);
     const rangoHorario: IRangoHorario = Helpers.traerRangoHorario(aux);
     const time: Date = new Date(rangoHorario.inicio);
@@ -65,18 +61,20 @@ export class TurnosService {
     } while (time <= rangoHorario.fin);
     return turnos;
   }
-  /*
-  traerPorDia(diaConsultado: Date): Observable<ITurnoId[]> {
-    const inicioBusqueda: Date = new Date(diaConsultado);
-    const finBusqueda: Date = new Date(diaConsultado);
-    inicioBusqueda.setHours(0, 0, 0, 0);
-    finBusqueda.setHours(23, 59, 59, 59);
-    const colection: AngularFirestoreCollection<ITurno> = this.afs.collection(
-      environment.db.turnos, ref => ref.where('time', '>=', inicioBusqueda).where('time', '<', finBusqueda)
-    );
-    return this.makeObservable(colection);
+
+
+  Reservar(turnoID: string, iturno: ITurno, especialistaUID: string) {
+    this.afs.collection(environment.db.usuarios)
+      .doc<IUsuario>(especialistaUID)
+      .collection<ITurno>(environment.collections.usuarios.turnos).doc(turnoID).set(iturno);
   }
-*/
+
+  registrarResena(turnoID: string, iturno: ITurno, especialistaUID: string) {
+    this.afs.collection(environment.db.usuarios)
+      .doc<IUsuario>(especialistaUID)
+      .collection<ITurno>(environment.collections.usuarios.turnos).doc(turnoID).set(iturno);
+  }
+
   traerPorDiaEspecialista(diaConsultado: Date, especialistaUID: string): Observable<ITurnoId[]> {
     const inicioBusqueda: Date = new Date(diaConsultado);
     const finBusqueda: Date = new Date(diaConsultado);
@@ -85,20 +83,19 @@ export class TurnosService {
     //
     const colection: AngularFirestoreCollection<ITurno> = this.afs.collection(environment.db.usuarios)
       .doc<IUsuario>(especialistaUID)
-      .collection<ITurno>('turnos', ref => ref
-        .where('time', '>=', inicioBusqueda)
+      .collection<ITurno>(environment.collections.usuarios.turnos, ref => ref
+        .where('time', '>', inicioBusqueda)
         .where('time', '<', finBusqueda)
-        .where('especialistaUID', '==', especialistaUID));
+        .orderBy('time')
+      );
     return this.makeObservable(colection);
   }
-
 
   private makeObservable(collection: AngularFirestoreCollection<ITurno>) {
     return collection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
           const iturno = a.payload.doc.data() as ITurno;
-          //  const turno = TurnosService.DataDAO(iturno);
           const id = a.payload.doc.id;
           return { id, turno: iturno } as ITurnoId;
         });

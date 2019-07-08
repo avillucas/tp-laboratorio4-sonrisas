@@ -1,0 +1,66 @@
+import { Observable } from 'rxjs';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ITurnoId } from '../../../models/turnoid.model';
+import { TurnosService } from '../../../servicios/turnos.service';
+
+@Component({
+  selector: 'app-reservas',
+  templateUrl: './reservas.component.html',
+  styleUrls: ['./reservas.component.css']
+})
+//reservas que se realizaron un por un cliente
+export class ReservasComponent implements OnInit {
+
+  //  turnos filtrados por especialista y dia
+  @Input() turnos: Observable<ITurnoId[]>;
+  // dia del que se filtro
+  @Input() dia: Date;
+  // especialista del que se filtro
+  @Input() especialistaUID: string;
+  // cliente qu esta entrando a realializar una reserva
+  @Input() clienteUID: string;
+  //
+  @Output() cancelarTurno = new EventEmitter();
+  @Output() completarEncuesta = new EventEmitter();
+
+  constructor() {
+  }
+
+  get Dia(): Date {
+    return this.dia;
+  }
+
+  get Turnos(): Observable<ITurnoId[]> {
+    return this.turnos;
+  }
+
+  get EspecialistaUID(): string {
+    return this.especialistaUID;
+  }
+
+  get ClienteUID(): string {
+    return this.clienteUID;
+  }
+
+  CancelarTurno(iturnoid: ITurnoId) {
+    this.cancelarTurno.emit(iturnoid);
+  }
+
+  CompletarEncuesta(iturnoid: ITurnoId) {
+    this.completarEncuesta.emit(iturnoid);
+  }
+
+  public AccionDisponibleMostrar(iturnoid: ITurnoId) {
+    if (typeof iturnoid.turno.asistio === 'undefined') {
+      return 'cancelar';
+    }
+    if (typeof iturnoid.turno.resena === 'undefined') {
+      return 'encuesta';
+    }
+  }
+
+  ngOnInit() {
+
+  }
+
+}

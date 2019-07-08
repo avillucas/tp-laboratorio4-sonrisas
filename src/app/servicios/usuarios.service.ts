@@ -34,6 +34,21 @@ export class UsuariosService {
     };
   }
 
+  static esCliente(iusuario: IUsuario): boolean {
+    // tslint:disable-next-line: triple-equals
+    return (iusuario.tipo == TipoUsuario.cliente);
+  }
+
+  static esEspecialista(iusuario: IUsuario): boolean {
+    // tslint:disable-next-line: triple-equals
+    return (iusuario.tipo == TipoUsuario.especialista);
+  }
+
+  static esRecepcionista(iusuario: IUsuario): boolean {
+    // tslint:disable-next-line: triple-equals
+    return (iusuario.tipo == TipoUsuario.recepcionista);
+  }
+
   static DataDAO(iusuario: IUsuario): Usuario {
     // tslint:disable-next-line: triple-equals
     if (iusuario.tipo == TipoUsuario.administrador) {
@@ -83,8 +98,6 @@ export class UsuariosService {
     const iusuario = a.payload.doc.data() as IUsuario;
     const usuario = UsuariosService.DataDAO(iusuario);
     const id = a.payload.doc.id;
-    console.info(a);
-
     return { id, usuario } as IUsuarioId;
   }
 

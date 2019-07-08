@@ -1,3 +1,28 @@
-<app-turnos-filtro  (filtrosAplicados)="aplicarFiltros($event)" ></app-turnos-filtro>
-<!-- -->
-<app-turnos-tabla [turnosDiaSolicitado]="TurnosDiaSolicitado"  ></app-turnos-tabla>
+<h1> Mis reservas</h1>
+<!-- Mis resevados -->
+<app-reservas [usuario]="Usuario | async" (cancelarTurno)="CancelarTurno($event)" (solicitarEncuesta)="SolicitarEncuesta($event)" ></app-reservas>
+<hr/>
+<h1>Reservar un nuevo Turno</h1>
+<!-- filtros -->
+<div class="row">
+  <div class="col-xs-12">
+    <!-- -->
+    <app-especialista (filtrosAplicados)="EspecialistaSeleccionado($event)"></app-especialista>
+    <!-- -->
+    <app-fecha (filtrosAplicados)="AplicarFiltros($event)" [hidden]="OcultarSelectorFechas"></app-fecha>
+    <!-- -->
+  </div>
+</div>
+<div class="row">
+      <!-- Tabla de turnos disponibles -->
+  <div class="col-xs-12">
+    <app-turnos-tabla
+    [turnos]="Turnos"
+    [dia]="DiaConsultado"
+    [especialista]="EspecialistaUID"
+    [usuario]="Usuario | async"
+    (reservarTurno)="ReservarTurno($event)"
+    >
+    </app-turnos-tabla>
+</div>
+</div>

@@ -19,7 +19,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AngularFireStorageModule, StorageBucket} from '@angular/fire/storage';
+import { AngularFireStorageModule, StorageBucket } from '@angular/fire/storage';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ProfileComponent } from './paginas/profile/profile.component';
 import { UsuariosService } from './servicios/usuarios.service';
@@ -30,7 +30,19 @@ import { TipousuarioPipe } from './pipes/tipousuario.pipe';
 import { TurnosComponent } from './paginas/turnos/turnos.component';
 import { TurnosTablaComponent } from './paginas/turnos-tabla/turnos-tabla.component';
 import { TurnosFiltroComponent } from './paginas/turnos-filtro/turnos-filtro.component';
+import { TurnosEspecialistaComponent } from './paginas/turnos-especialista/turnos-especialista.component';
+import { TurnosRecepcionistaComponent } from './paginas/turnos-recepcionista/turnos-recepcionista.component';
 import { EspecialistasLaboralesComponent } from './paginas/especialistas-laborales/especialistas-laborales.component';
+import { TurnosVisitaComponent } from './paginas/turnos-visita/turnos-visita.component';
+import { TimestrPipe } from './pipes/timestr.pipe';
+import { EspecialistaComponent } from './partes/filtros/especialista/especialista.component';
+import { FechaComponent } from './partes/filtros/fecha/fecha.component';
+import { ClienteComponent } from './partes/filtros/cliente/cliente.component';
+import { ReservasComponent } from './partes/tablas/reservas/reservas.component';
+import { ResenaComponent } from './partes/partes/resena/resena.component';
+import { ConsultorioPipe } from './pipes/consultorio.pipe';
+import { AtencionesComponent } from './partes/tablas/atenciones/atenciones.component';
+import { EncuestaComponent } from './partes/encuesta/encuesta.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +61,19 @@ import { EspecialistasLaboralesComponent } from './paginas/especialistas-laboral
     TurnosComponent,
     TurnosTablaComponent,
     TurnosFiltroComponent,
+    TurnosEspecialistaComponent,
+    TurnosRecepcionistaComponent,
     EspecialistasLaboralesComponent,
+    TurnosVisitaComponent,
+    TimestrPipe,
+    EspecialistaComponent,
+    FechaComponent,
+    ClienteComponent,
+    ReservasComponent,
+    ResenaComponent,
+    ConsultorioPipe,
+    AtencionesComponent,
+    EncuestaComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,11 @@
-import { Time } from '@angular/common';
-
 export interface ITurno {
-  time: Date;
+  time: any;
+  consultorio: number;
   clienteUID?: string;
   clienteNombre?: string;
+  especialistaUID?: string;
+  especialistaNombre?: string;
+  resena?: string;
+  asistio?: boolean;
 }
 
