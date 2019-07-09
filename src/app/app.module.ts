@@ -45,6 +45,7 @@ import { AsignacionTurnosComponent } from './partes/asignaciones/turnos/turnos.c
 import { TurnosAccionComponent } from './partes/turnos-accion/turnos-accion.component';
 import { ReservasAccionComponent } from './partes/reservas-accion/reservas-accion.component';
 import { TurnosEspecialistaComponent } from './paginas/turnos-especialista/turnos-especialista.component';
+import { TurnosRecepcionistaComponent } from './paginas/turnos-recepcionista/turnos-recepcionista.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { TurnosEspecialistaComponent } from './paginas/turnos-especialista/turno
     TurnosAccionComponent,
     ReservasAccionComponent,
     TurnosEspecialistaComponent,
+    TurnosRecepcionistaComponent,
   ],
   imports: [
     BrowserModule,

@@ -16,29 +16,28 @@ export class ClienteComponent implements OnInit {
 
   public ClientesControl: FormControl;
   public FiltroForm: FormGroup;
-  private especialistas: Observable<IUsuarioId[]>;
+  private clientes: Observable<IUsuarioId[]>;
 
   constructor(
     private builder: FormBuilder,
     private eService: UsuariosService
   ) {
-    this.especialistas = this.eService.traerClientes();
+    this.clientes = this.eService.traerClientes();
     this.ClientesControl = new FormControl(this.ClientesControl, [Validators.required]);
-    this.FiltroForm = this.builder.group({ especialista: this.ClientesControl });
+    this.FiltroForm = this.builder.group({ clientesf: this.ClientesControl });
   }
   public get ClienteInput() {
-    return this.FiltroForm.get('clientes');
+    return this.FiltroForm.get('clientesf');
   }
 
-  public get Especialistas(): Observable<IUsuarioId[]> {
-    return this.especialistas;
+  public get Clientes(): Observable<IUsuarioId[]> {
+    return this.clientes;
   }
 
 
   Filtrar() {
-    // TODO devolver todo el especialista
-    const eUID = this.ClientesControl.value;
-    this.filtrosAplicados.emit({ eUID });
+    const cliente = this.ClientesControl.value;
+    this.filtrosAplicados.emit(cliente);
   }
 
   ngOnInit() {
