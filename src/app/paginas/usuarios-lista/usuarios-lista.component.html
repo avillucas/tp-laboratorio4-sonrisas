@@ -13,8 +13,10 @@
       <td>{{ usu.usuario.Nombre }}</td>
       <td>{{ usu.usuario.Email }}</td>
       <td>
+        <!--
         <button (click)="Borrar(usu)">Borrar</button>
-        <button  routerLink="/especialistas-horarios">Cargar Días laborables</button>
+        -->
+        <button *ngIf="usu.usuario.Tipo == 2" routerLink="/especialistas">Cargar Días laborables</button>
       </td>
     </tr>
   </tbody>

@@ -37,9 +37,12 @@ export class TurnosComponent implements OnInit {
     this.ocultarSelectorFechas = true;
     this.ocultarTablaTurnos = true;
     this.ocultarEncuestas = true;
+    this.cliente = null;
     this.aService.user$.subscribe(
       (iusuario: IUsuario) => {
-        this.cliente = { id: this.aService.CurrentUID, usuario: UsuariosService.DataDAO(iusuario) } as IUsuarioId;
+        if (iusuario) {
+          this.cliente = { id: this.aService.CurrentUID, usuario: UsuariosService.DataDAO(iusuario) } as IUsuarioId;
+        }
       });
   }
 

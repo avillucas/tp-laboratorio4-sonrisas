@@ -17,7 +17,6 @@ import { ITurnoId } from '../models/turnoid.model';
   providedIn: 'root'
 })
 
-
 export class UsuariosService {
 
   private collection: AngularFirestoreCollection<IUsuario>;
@@ -110,15 +109,15 @@ export class UsuariosService {
     return this.collection.doc(UID).set(iusuario);
   }
 
-  borrar(id: string) {
-    // TODO eliminar tambien la relacion con las demas cosas y la relacion con el auth
-    return this.collection.doc(id).delete();
+  borrar(UID: string) {
+    // TODO eliminar las reservas en las  que esta como cliente
+    // TODO eliminar los turnos en los que esta como especialista
+    return this.collection.doc(UID).delete();
   }
 
-  actualizar(id: string, usuario: Usuario) {
-    const userRef: AngularFirestoreDocument<IUsuario> = this.afs.doc(`${environment.db.usuarios}/${id}`);
-    const imateria = UsuariosService.DAOData(usuario);
-    return userRef.set(imateria, { merge: true });
+  actualizar(UID: string, data): Promise<void> {
+    const userRef: AngularFirestoreDocument<IUsuario> = this.collection.doc(UID);
+    return userRef.set(data, { merge: true });
   }
 
   traerEspecialistas(): Observable<IUsuarioId[]> {

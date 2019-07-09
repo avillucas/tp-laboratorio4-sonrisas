@@ -54,6 +54,11 @@ export class TurnosService {
     return (TurnosService.aunNoAsiste(iturnoid) && TurnosService.reservadoPorUsuario(iturnoid, clienteUID));
   }
 
+  static completoEncuesta(iturnoid: ITurnoId, clienteUID: string) {
+    return (iturnoid.turno.encuestado && TurnosService.reservadoPorUsuario(iturnoid, clienteUID));
+  }
+
+
   static esEncuestablePorUsuario(iturnoid: ITurnoId, clienteUID: string) {
     return (
       iturnoid.turno.encuestado === false

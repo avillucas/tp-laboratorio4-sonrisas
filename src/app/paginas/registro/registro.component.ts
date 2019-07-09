@@ -19,11 +19,8 @@ export class RegistroComponent implements OnInit {
   public EmailControl: FormControl;
   public PasswordControl: FormControl;
   public TipoControl: FormControl;
-  public AvatarControl: FormControl;
   public RegistroForm: FormGroup;
   private tiposUsuario: TipoUsuario[];
-
-  private profileImage: string;
 
   constructor(
     private builder: FormBuilder,
@@ -32,7 +29,7 @@ export class RegistroComponent implements OnInit {
     private uService: UsuariosService,
     private sService: StorageService
   ) {
-    this.tiposUsuario = [TipoUsuario.administrador, TipoUsuario.especialista, TipoUsuario.recepcionista, TipoUsuario.cliente];
+    this.tiposUsuario = [TipoUsuario.especialista, TipoUsuario.recepcionista, TipoUsuario.cliente];
     this.NombreControl = new FormControl(this.NombreControl, [
       Validators.required,
       Validators.minLength(4),
@@ -53,10 +50,6 @@ export class RegistroComponent implements OnInit {
     ]);
 
     this.TipoControl = new FormControl(this.TipoControl, [
-      Validators.required
-    ]);
-
-    this.AvatarControl = new FormControl(this.AvatarControl, [
       Validators.required
     ]);
 
@@ -84,17 +77,12 @@ export class RegistroComponent implements OnInit {
     return this.RegistroForm.get('tipo');
   }
 
-  public get AvatarInput() {
-    return this.RegistroForm.get('avatar');
-  }
-
-  private crear(email: string, nombre: string, tipo: TipoUsuario, profileImage: string): Usuario {
-    return UsuariosService.DataDAO({ email, nombre, tipo, profileImage } as IUsuario
-    );
+  private crear(email: string, nombre: string, tipo: TipoUsuario): Usuario {
+    return UsuariosService.DataDAO({ email, nombre, tipo } as IUsuario);
   }
 
   Registrar() {
-    const usuario: Usuario = this.crear(this.EmailInput.value, this.NombreInput.value, this.TipoInput.value, this.profileImage);
+    const usuario: Usuario = this.crear(this.EmailInput.value, this.NombreInput.value, this.TipoInput.value);
     this.authService.clienteSingIn(usuario, this.PasswordInput.value).then(res => {
       this.router.navigate(['']);
     }, err => {
@@ -105,14 +93,6 @@ export class RegistroComponent implements OnInit {
 
   public get TiposUsuario(): TipoUsuario[] {
     return this.tiposUsuario;
-  }
-
-  public DefinirAvatar($event) {
-    this.sService.uploadFileOnEvent($event);
-    this.sService.uploadPercent.subscribe({
-      next(data) { console.log('porcentaje: ' + data); }
-    });
-    this.sService.downloadURL.subscribe(url => this.profileImage = url);
   }
 
   ngOnInit() {

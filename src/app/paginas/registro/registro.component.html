@@ -36,14 +36,9 @@
           <div *ngIf="PasswordInput.hasError('maxlength')">Debe tener maximo 255 caracteres</div>
         </div>
       </div>
-      <div class="form-group has-feedback">
-          <input type="file" name="avatar" [formControl]="AvatarControl"  (change)="DefinirAvatar($event)" required >
-          <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-      </div>
-
 
       <div class="form-group has-feedback">
-        <span class="glyphicon glyphicon-lock form-control-feedback">Tipo de Usuario</span>
+        <label for="tipo">Tipo de Usuario</label>
         <select  name="tipo" [formControl]="TipoControl" >
             <option *ngFor="let tipoUsuario of TiposUsuario " [value]="tipoUsuario">{{ tipoUsuario | tipousuario }}</option>
         </select>

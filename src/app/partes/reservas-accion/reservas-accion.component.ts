@@ -21,12 +21,16 @@ export class ReservasAccionComponent implements OnInit {
 
   get AccionDisponible(): string {
     const iturnoid = this.iturnoid;
+    if (TurnosService.completoEncuesta(iturnoid, this.clienteUID)) {
+      return 'encuestado';
+    }
     if (TurnosService.esCancelablePorUsuario(iturnoid, this.clienteUID)) {
       return 'cancelar';
     }
     if (TurnosService.esEncuestablePorUsuario(iturnoid, this.clienteUID)) {
       return 'encuesta';
     }
+
   }
 
   CompletarEncuesta(iturnoid: ITurnoId) {

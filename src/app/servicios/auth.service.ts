@@ -27,7 +27,7 @@ export class AuthService {
       switchMap(user => {
         // Logged in
         if (user) {
-          return this.afs.doc<IUsuario>(`${environment.db.usuarios}/${user.uid}`).valueChanges();
+          return this.afs.collection(environment.db.usuarios).doc<IUsuario>(user.uid).valueChanges();
         } else {
           // Logged out
           return of(null);
@@ -65,7 +65,7 @@ export class AuthService {
     return this.user$.pipe(first()).toPromise();
   }
 
-  borrarEsteUsuario(){
+  borrarEsteUsuario() {
     //https://firebase.google.com/docs/auth/web/manage-users?hl=es-419
     this.afAuth.auth.currentUser.delete().then(function () {
       console.info('borrado');

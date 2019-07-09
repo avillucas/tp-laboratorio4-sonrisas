@@ -46,6 +46,8 @@ import { TurnosAccionComponent } from './partes/turnos-accion/turnos-accion.comp
 import { ReservasAccionComponent } from './partes/reservas-accion/reservas-accion.component';
 import { TurnosEspecialistaComponent } from './paginas/turnos-especialista/turnos-especialista.component';
 import { TurnosRecepcionistaComponent } from './paginas/turnos-recepcionista/turnos-recepcionista.component';
+import { PartesProfileComponent } from './partes/profile/profile.component';
+import { PartesMenuComponent } from './partes/menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,7 @@ import { TurnosRecepcionistaComponent } from './paginas/turnos-recepcionista/tur
     NotfoundComponent,
     TemplateComponent,
     ProfileComponent,
+    PartesProfileComponent,
     UsuariosFiltrosComponent,
     UsuariosComponent,
     UsuariosListaComponent,
@@ -79,6 +82,7 @@ import { TurnosRecepcionistaComponent } from './paginas/turnos-recepcionista/tur
     ReservasAccionComponent,
     TurnosEspecialistaComponent,
     TurnosRecepcionistaComponent,
+    PartesMenuComponent,
   ],
   imports: [
     BrowserModule,
