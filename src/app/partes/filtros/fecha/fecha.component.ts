@@ -1,9 +1,10 @@
 import { Observable } from 'rxjs';
 
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IUsuarioId } from '../../../models/usuarioid.model';
 import { UsuariosService } from '../../../servicios/usuarios.service';
+import { Helpers } from '../../../clases/helpers';
 @Component({
   selector: 'app-fecha',
   templateUrl: './fecha.component.html',
@@ -11,6 +12,8 @@ import { UsuariosService } from '../../../servicios/usuarios.service';
 })
 export class FechaComponent implements OnInit {
   @Output() filtrosAplicados = new EventEmitter();
+  @Input() defaultDate: Date;
+
 
   public DiaConsultadoControl: FormControl;
   public FiltroForm: FormGroup;
@@ -32,5 +35,8 @@ export class FechaComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (typeof this.defaultDate !== 'undefined') {
+      this.DiaConsultadoInput.setValue(Helpers.parseDateToISO(this.defaultDate));
+    }
   }
 }

@@ -12,7 +12,7 @@ import { TurnosService } from '../../../servicios/turnos.service';
 export class AtencionesComponent implements OnInit {
 
   //  turnos filtrados por especialista y dia
-  @Input() turnos: Observable<ITurnoId[]>;
+  @Input() atenciones: Observable<ITurnoId[]>;
   // dia del que se filtro
   @Input() dia: Date;
   //
@@ -26,8 +26,8 @@ export class AtencionesComponent implements OnInit {
     return this.dia;
   }
 
-  get Turnos(): Observable<ITurnoId[]> {
-    return this.turnos;
+  get Atenciones(): Observable<ITurnoId[]> {
+    return this.atenciones;
   }
 
   MarcarAsistencia(iturnoid: ITurnoId) {
@@ -41,6 +41,9 @@ export class AtencionesComponent implements OnInit {
   public AccionDisponibleMostrar(iturnoid: ITurnoId) {
     if (typeof iturnoid.turno.asistio === 'undefined') {
       return 'vigente';
+    }
+    if (typeof iturnoid.turno.resena !== 'undefined') {
+      return 'resenado';
     }
   }
 

@@ -7,6 +7,9 @@ import { IUsuarioId } from '../../models/usuarioid.model';
 import { IUsuario } from '../../models/usuario.model';
 import { UsuariosService } from '../../servicios/usuarios.service';
 import { Usuario } from '../../clases/usuario';
+import { IEncuesta } from '../../models/encuesta.model';
+import { EncuestasService } from '../../servicios/encuestas.service';
+import { IEncuestaId } from '../../models/encuestaid.model';
 
 @Component({
   selector: 'app-turnos',
@@ -23,12 +26,13 @@ export class TurnosComponent implements OnInit {
   private ocultarSelectorFechas: boolean;
   private ocultarTablaTurnos: boolean;
   private ocultarEncuestas: boolean;
-
+  private turnoEncuestado: ITurnoId;
 
   constructor(
     private tService: TurnosService,
     private uService: UsuariosService,
-    private aService: AuthService
+    private aService: AuthService,
+    private eService: EncuestasService
   ) {
     this.ocultarSelectorFechas = true;
     this.ocultarTablaTurnos = true;
@@ -41,6 +45,10 @@ export class TurnosComponent implements OnInit {
 
   public get OcultarSelectorFechas(): boolean {
     return this.ocultarSelectorFechas;
+  }
+
+  public get TurnoEncuestado(): ITurnoId {
+    return this.turnoEncuestado;
   }
 
   public get OcultarEncuestas(): boolean {
@@ -86,13 +94,19 @@ export class TurnosComponent implements OnInit {
   }
 
   public CancelarTurno(iturnoid: ITurnoId) {
-   this.tService.Cancelar(iturnoid);
+    this.tService.Cancelar(iturnoid);
   }
 
   public SolicitarEncuesta(iturnoid: ITurnoId) {
-    // TODO completar el proceso de encuestas
     this.ocultarEncuestas = false;
-    throw new Error('No implementado aun');
+    this.turnoEncuestado = iturnoid;
+  }
+
+  public GuardarEncuesta(encuesta: IEncuestaId) {
+    this.eService.Guardar(encuesta);
+    this.tService.MarcarEncuestado(this.turnoEncuestado);
+    this.ocultarEncuestas = true;
+    this.turnoEncuestado = null;
   }
 
   EspecialistaSeleccionado(especialista: IUsuarioId) {
@@ -109,6 +123,5 @@ export class TurnosComponent implements OnInit {
   ngOnInit() {
     this.reservas = this.tService.traerReservasPorUsuario(this.CurrentUID);
   }
-
 
 }

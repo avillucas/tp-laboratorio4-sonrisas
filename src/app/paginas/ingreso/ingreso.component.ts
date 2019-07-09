@@ -52,9 +52,8 @@ export class IngresoComponent implements OnInit {
   }
 
   Ingresar() {
-    this.authService.emailPasswordLogIn(this.EmailInput.value, this.PasswordInput.value).then(
-      res => {
-        console.info(res);
+    this.authService.emailPasswordLogIn(this.EmailInput.value, this.PasswordInput.value)
+    .then(res => {
         this.router.navigate(['/']);
       },
       err => {

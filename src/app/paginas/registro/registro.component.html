@@ -24,7 +24,7 @@
           <div *ngIf="EmailInput.hasError('required')">Complete con un email </div>
           <div *ngIf="EmailInput.hasError('minlength')">Debe tener al menos  4 caracteres</div>
           <div *ngIf="EmailInput.hasError('maxlength')">Debe tener maximo 255 caracteres</div>
-          <div *ngIf="EmailInput.hasError('pattern')">Formato de email valido</div>
+          <div *ngIf="EmailInput.hasError('email')">Formato de email valido</div>
         </div>
       </div>
       <div class="form-group has-feedback">

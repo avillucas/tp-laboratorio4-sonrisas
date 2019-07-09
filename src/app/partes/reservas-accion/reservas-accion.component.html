@@ -1,11 +1,5 @@
 <span [ngSwitch]="AccionDisponible">
-  <div *ngSwitchCase="'encuesta'">
-    <div class="resena" *ngIf="iturnoid.turno.resena">
-    <h2> Breve resumen de tratamiente realizado</h2>
-    <p>{{ iturnoid.turno.resena }}</p>
-    </div>
-    <button (click)="CompletarEncuesta(iturnoid)">Completar Encuesta</button>
-  </div>
+  <button *ngSwitchCase="'encuesta'" (click)="CompletarEncuesta(iturnoid)">Completar Encuesta</button>
   <button *ngSwitchCase="'cancelar'" (click)="CancelarTurno(iturnoid)">Cancelar Turno</button>
-  <span *ngSwitchDefault class="nodisponible">No Disponible</span>
+  <span *ngSwitchDefault class="noasistio">No Asistio</span>
 </span>

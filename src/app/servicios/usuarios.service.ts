@@ -11,7 +11,6 @@ import { Administrador } from '../clases/administrador';
 import { Especialista } from '../clases/especialista';
 import { Recepcionista } from '../clases/recepcionista';
 import { Cliente } from '../clases/clientes';
-import { ITurno } from '../models/turno.model';
 import { ITurnoId } from '../models/turnoid.model';
 
 @Injectable({

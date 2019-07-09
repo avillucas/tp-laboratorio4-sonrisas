@@ -12,10 +12,11 @@
   <tbody>
     <tr *ngFor="let iturnoid of Reservas | async ">
       <!-- Horario  mostrar  -->
-      <td class="hora">{{ iturnoid.turno.time | timestr | date:'HH:mm:ss' }}</td>
+      <td class="hora">{{ iturnoid.turno.time | timestr | date:'dd-MM HH:mm' }}</td>
       <td>{{ iturnoid.turno.especialistaNombre }}</td>
       <td>
         <app-reservas-accion
+        [clienteUID]="ClienteUID"
         [iturnoid]="iturnoid"
         (completarEncuesta)="CompletarEncuesta($event)"
         (cancelarTurno)="CancelarTurno($event)"

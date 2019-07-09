@@ -21,10 +21,10 @@ export class ReservasAccionComponent implements OnInit {
 
   get AccionDisponible(): string {
     const iturnoid = this.iturnoid;
-    if (typeof iturnoid.turno.asistio === 'undefined') {
+    if (TurnosService.esCancelablePorUsuario(iturnoid, this.clienteUID)) {
       return 'cancelar';
     }
-    if (typeof iturnoid.turno.resena === 'undefined') {
+    if (TurnosService.esEncuestablePorUsuario(iturnoid, this.clienteUID)) {
       return 'encuesta';
     }
   }

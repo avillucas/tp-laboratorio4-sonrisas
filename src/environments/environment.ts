@@ -48,6 +48,9 @@ export const environment = {
     params: {
       fechaTurnos: 'fecha'
     }
+  },
+  encuesta: {
+    puntajeMaximo: 10
   }
 };
 

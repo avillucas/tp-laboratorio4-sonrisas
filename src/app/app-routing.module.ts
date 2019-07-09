@@ -16,6 +16,7 @@ import { IsRecepcionistaGuard } from './guards/is-recepcionista.guard';
 import { IsClienteGuard } from './guards/is-cliente.guard';
 import { SelectorEspecialistaComponent } from './partes/filtros/especialista/especialista.component';
 import { EspecialistasComponent } from './paginas/especialistas/especialistas.component';
+import { TurnosEspecialistaComponent } from './paginas/turnos-especialista/turnos-especialista.component';
 
 
 const routes: Routes = [
@@ -27,6 +28,7 @@ const routes: Routes = [
     children: [
       { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'turnos', component: TurnosComponent, canActivate: [AuthGuard, IsClienteGuard] },
+      { path: 'turnos-especialista', component: TurnosEspecialistaComponent, canActivate: [AuthGuard, IsEspecialistaGuard] },
       { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard, IsAdminGuard] },
       { path: 'especialistas', component: EspecialistasComponent, canActivate: [AuthGuard, IsAdminGuard] },

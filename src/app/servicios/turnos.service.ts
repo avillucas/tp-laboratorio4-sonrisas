@@ -11,7 +11,6 @@ import { IUsuario } from '../models/usuario.model';
 import { Helpers } from '../clases/helpers';
 import { IRangoHorario } from '../models/rangohorario.model';
 import { Consultorios } from '../enums/consultorios.enum';
-import { firestore } from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -28,11 +27,23 @@ export class TurnosService {
   }
 
   static estaReservado(iturnoid: ITurnoId): boolean {
-    return (typeof iturnoid.turno.clienteUID !== 'undefined');
+    return iturnoid.turno.reservado;
+  }
+
+  static estaEncuestado(iturnoid: ITurnoId): boolean {
+    return iturnoid.turno.encuestado;
+  }
+
+  static aunNoAsiste(iturnoid: ITurnoId): boolean {
+    return typeof iturnoid.turno.asistio === 'undefined';
   }
 
   static seAsistio(iturnoid: ITurnoId): boolean {
-    return typeof iturnoid.turno.asistio !== 'undefined'
+    return iturnoid.turno.asistio === true;
+  }
+
+  static seFalto(iturnoid: ITurnoId): boolean {
+    return iturnoid.turno.asistio === false;
   }
 
   static reservadoPorUsuario(iturnoid: ITurnoId, clienteUID: string): boolean {
@@ -40,12 +51,20 @@ export class TurnosService {
   }
 
   static esCancelablePorUsuario(iturnoid: ITurnoId, clienteUID: string) {
-    return (!TurnosService.seAsistio(iturnoid) && TurnosService.reservadoPorUsuario(iturnoid, clienteUID));
+    return (TurnosService.aunNoAsiste(iturnoid) && TurnosService.reservadoPorUsuario(iturnoid, clienteUID));
+  }
+
+  static esEncuestablePorUsuario(iturnoid: ITurnoId, clienteUID: string) {
+    return (
+      iturnoid.turno.encuestado === false
+      && TurnosService.seAsistio(iturnoid)
+      && TurnosService.reservadoPorUsuario(iturnoid, clienteUID)
+    );
   }
 
   static generarId(nTime: Date, consultorio: Consultorios): string {
     const consultorioStr = Consultorios[consultorio].toString();
-    return nTime.getTime() + consultorioStr;
+    return consultorioStr + nTime.getTime();
   }
 
   static DataDAO(iturno: ITurno): Turno {
@@ -69,7 +88,11 @@ export class TurnosService {
           time: nTime,
           consultorio: consultorioStr,
           especialistaUID: especialista.id,
-          especialistaNombre: especialista.usuario.Nombre
+          especialistaNombre: especialista.usuario.Nombre,
+          reservado: false,
+          encuestado: false,
+          clienteUID: null,
+          clienteNombre: null
         } as ITurno
       } as ITurnoId;
       iturnosid.push(iturnoid);
@@ -80,13 +103,49 @@ export class TurnosService {
 
   //TODO averiguar como hacer esto correctamente
   public static tieneCliente(iturnoid: ITurnoId) {
-    if (typeof iturnoid.turno.clienteUID === 'undefined' || typeof iturnoid.turno.clienteNombre === 'undefined') {
+    if (typeof iturnoid.turno.clienteUID === null || typeof iturnoid.turno.clienteNombre === null) {
       throw Error('El turno no tiene el cliente a quien se lo debe reservar ');
     }
   }
 
+  public static tieneResena(iturnoid: ITurnoId) {
+    if (typeof iturnoid.turno.resena === 'undefined') {
+      throw Error('no tiene reseña');
+    }
+  }
+
+  public CargarResena(iturnoid: ITurnoId): Promise<void> {
+    TurnosService.tieneResena(iturnoid);
+    // actualizar el turno en el especialista
+    return this.actualizarTurno(iturnoid).then(res => {
+      // crear la reserva en el cliente
+      return this.actualizarReserva(iturnoid);
+    });
+  }
+
+
+  public MarcarFalta(iturnoid: ITurnoId): Promise<void> {
+    iturnoid.turno.asistio = false;
+    // actualizar el turno en el especialista
+    return this.actualizarTurno(iturnoid).then(res => {
+      // crear la reserva en el cliente
+      return this.actualizarReserva(iturnoid);
+    });
+  }
+
+  public MarcarEncuestado(iturnoid: ITurnoId): Promise<void> {
+    iturnoid.turno.encuestado = true;
+    // actualizar el turno en el especialista
+    return this.actualizarTurno(iturnoid).then(res => {
+      // crear la reserva en el cliente
+      return this.actualizarReserva(iturnoid);
+    });
+  }
+
+
   public Reservar(iturnoid: ITurnoId): Promise<void> {
     TurnosService.tieneCliente(iturnoid);
+    iturnoid.turno.reservado = true;
     // actualizar el turno en el especialista
     return this.actualizarTurno(iturnoid).then(res => {
       // crear la reserva en el cliente
@@ -108,8 +167,9 @@ export class TurnosService {
       .collection<ITurno>(environment.collections.usuarios.turnos)
       .doc(iturnoid.id)
       .update({
-        clienteUID: firestore.FieldValue.delete(),
-        clienteNombre: firestore.FieldValue.delete(),
+        reservado: false,
+        clienteUID: null,
+        clienteNombre: null,
       });
   }
 
@@ -139,23 +199,27 @@ export class TurnosService {
       .set(iturnoid.turno);
   }
 
-  registrarResena(turnoID: string, iturno: ITurno, especialistaUID: string) {
-    this.afs.collection(environment.db.usuarios)
-      .doc<IUsuario>(especialistaUID)
-      .collection<ITurno>(environment.collections.usuarios.turnos).doc(turnoID).set(iturno);
-  }
-
-  traerPorDiaEspecialista(diaConsultado: Date, especialistaUID: string): Observable<ITurnoId[]> {
-    const inicioBusqueda: Date = new Date(diaConsultado);
-    const finBusqueda: Date = new Date(diaConsultado);
-    inicioBusqueda.setHours(0, 0, 0, 0);
-    finBusqueda.setHours(23, 59, 59, 59);
-    //
+  traerAtencionesPorDiaEspecialista(diaConsultado: Date, especialistaUID: string): Observable<ITurnoId[]> {
+    const rango: IRangoHorario = Helpers.traerRangoDeUnDia(diaConsultado);
     const colection: AngularFirestoreCollection<ITurno> = this.afs.collection(environment.db.usuarios)
       .doc<IUsuario>(especialistaUID)
       .collection<ITurno>(environment.collections.usuarios.turnos, ref => ref
-        .where('time', '>', inicioBusqueda)
-        .where('time', '<', finBusqueda)
+        .where('time', '>', rango.inicio)
+        .where('time', '<', rango.fin)
+        .where('reservado', '==', true)
+        .orderBy('time', 'desc')
+      );
+    return this.makeObservable(colection);
+  }
+
+
+  traerPorDiaEspecialista(diaConsultado: Date, especialistaUID: string): Observable<ITurnoId[]> {
+    const rango: IRangoHorario = Helpers.traerRangoDeUnDia(diaConsultado);
+    const colection: AngularFirestoreCollection<ITurno> = this.afs.collection(environment.db.usuarios)
+      .doc<IUsuario>(especialistaUID)
+      .collection<ITurno>(environment.collections.usuarios.turnos, ref => ref
+        .where('time', '>', rango.inicio)
+        .where('time', '<', rango.fin)
         .orderBy('time')
       );
     return this.makeObservable(colection);

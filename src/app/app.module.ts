@@ -44,6 +44,7 @@ import { EspecialistasComponent } from './paginas/especialistas/especialistas.co
 import { AsignacionTurnosComponent } from './partes/asignaciones/turnos/turnos.component';
 import { TurnosAccionComponent } from './partes/turnos-accion/turnos-accion.component';
 import { ReservasAccionComponent } from './partes/reservas-accion/reservas-accion.component';
+import { TurnosEspecialistaComponent } from './paginas/turnos-especialista/turnos-especialista.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { ReservasAccionComponent } from './partes/reservas-accion/reservas-accio
     AsignacionTurnosComponent,
     TurnosAccionComponent,
     ReservasAccionComponent,
+    TurnosEspecialistaComponent,
   ],
   imports: [
     BrowserModule,
