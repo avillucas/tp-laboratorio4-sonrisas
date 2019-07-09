@@ -1,3 +1,4 @@
+
 import { AuthGuard } from './guards/auth.guard';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -28,21 +29,19 @@ import { UsuariosComponent } from './paginas/usuarios/usuarios.component';
 import { UsuariosListaComponent } from './paginas/usuarios-lista/usuarios-lista.component';
 import { TipousuarioPipe } from './pipes/tipousuario.pipe';
 import { TurnosComponent } from './paginas/turnos/turnos.component';
-import { TurnosTablaComponent } from './paginas/turnos-tabla/turnos-tabla.component';
-import { TurnosFiltroComponent } from './paginas/turnos-filtro/turnos-filtro.component';
-import { TurnosEspecialistaComponent } from './paginas/turnos-especialista/turnos-especialista.component';
-import { TurnosRecepcionistaComponent } from './paginas/turnos-recepcionista/turnos-recepcionista.component';
-import { EspecialistasLaboralesComponent } from './paginas/especialistas-laborales/especialistas-laborales.component';
-import { TurnosVisitaComponent } from './paginas/turnos-visita/turnos-visita.component';
+import { TablaTurnosComponent } from './partes/tablas/turnos/turnos.component';
 import { TimestrPipe } from './pipes/timestr.pipe';
-import { EspecialistaComponent } from './partes/filtros/especialista/especialista.component';
+import { SelectorEspecialistaComponent } from './partes/filtros/especialista/especialista.component';
 import { FechaComponent } from './partes/filtros/fecha/fecha.component';
 import { ClienteComponent } from './partes/filtros/cliente/cliente.component';
+import { ResenaComponent } from './partes/resena/resena.component';
 import { ReservasComponent } from './partes/tablas/reservas/reservas.component';
-import { ResenaComponent } from './partes/partes/resena/resena.component';
 import { ConsultorioPipe } from './pipes/consultorio.pipe';
 import { AtencionesComponent } from './partes/tablas/atenciones/atenciones.component';
 import { EncuestaComponent } from './partes/encuesta/encuesta.component';
+import { ConsultorioComponent } from './partes/filtros/consultorio/consultorio.component';
+import { EspecialistasComponent } from './paginas/especialistas/especialistas.component';
+import { AsignacionTurnosComponent } from './partes/asignaciones/turnos/turnos.component';
 
 @NgModule({
   declarations: [
@@ -59,14 +58,9 @@ import { EncuestaComponent } from './partes/encuesta/encuesta.component';
     UsuariosListaComponent,
     TipousuarioPipe,
     TurnosComponent,
-    TurnosTablaComponent,
-    TurnosFiltroComponent,
-    TurnosEspecialistaComponent,
-    TurnosRecepcionistaComponent,
-    EspecialistasLaboralesComponent,
-    TurnosVisitaComponent,
+    TablaTurnosComponent,
     TimestrPipe,
-    EspecialistaComponent,
+    SelectorEspecialistaComponent,
     FechaComponent,
     ClienteComponent,
     ReservasComponent,
@@ -74,6 +68,9 @@ import { EncuestaComponent } from './partes/encuesta/encuesta.component';
     ConsultorioPipe,
     AtencionesComponent,
     EncuestaComponent,
+    ConsultorioComponent,
+    EspecialistasComponent,
+    AsignacionTurnosComponent,
   ],
   imports: [
     BrowserModule,

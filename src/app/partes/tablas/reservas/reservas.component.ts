@@ -4,7 +4,7 @@ import { ITurnoId } from '../../../models/turnoid.model';
 import { TurnosService } from '../../../servicios/turnos.service';
 
 @Component({
-  selector: 'app-reservas',
+  selector: 'app-tabla-reservas',
   templateUrl: './reservas.component.html',
   styleUrls: ['./reservas.component.css']
 })
@@ -12,7 +12,7 @@ import { TurnosService } from '../../../servicios/turnos.service';
 export class ReservasComponent implements OnInit {
 
   //  turnos filtrados por especialista y dia
-  @Input() turnos: Observable<ITurnoId[]>;
+  @Input() reservas: Observable<ITurnoId[]>;
   // dia del que se filtro
   @Input() dia: Date;
   // especialista del que se filtro
@@ -31,7 +31,7 @@ export class ReservasComponent implements OnInit {
   }
 
   get Turnos(): Observable<ITurnoId[]> {
-    return this.turnos;
+    return this.reservas;
   }
 
   get EspecialistaUID(): string {

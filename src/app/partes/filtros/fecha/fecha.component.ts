@@ -27,7 +27,7 @@ export class FechaComponent implements OnInit {
   }
 
   Filtrar() {
-    const fecha = this.DiaConsultadoInput.value;
+    const fecha = new Date(this.DiaConsultadoInput.value + ' 00:00:00');
     this.filtrosAplicados.emit(fecha);
   }
 

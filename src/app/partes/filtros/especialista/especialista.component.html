@@ -5,7 +5,7 @@
       <div class="form-group has-feedback" >
         <label class=""><span class="glyphicon glyphicon-lock"></span>Seleccione un especialista*</label>
         <select name="tipo" [formControl]="EspecialistaControl" (change)="Filtrar()">
-          <option *ngFor="let especialista of Especialistas | async " [value]="especialista.id">
+          <option *ngFor="let especialista of Especialistas | async " [ngValue]="especialista">
             {{ especialista.usuario.Nombre  }}
           </option>
         </select>

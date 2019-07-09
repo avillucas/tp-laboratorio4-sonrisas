@@ -4,7 +4,7 @@ import { ITurnoId } from '../../../models/turnoid.model';
 import { TurnosService } from '../../../servicios/turnos.service';
 
 @Component({
-  selector: 'app-atenciones',
+  selector: 'app-tabla-atenciones',
   templateUrl: './atenciones.component.html',
   styleUrls: ['./atenciones.component.css']
 })

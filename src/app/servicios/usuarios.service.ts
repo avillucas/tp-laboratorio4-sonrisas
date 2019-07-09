@@ -12,6 +12,7 @@ import { Especialista } from '../clases/especialista';
 import { Recepcionista } from '../clases/recepcionista';
 import { Cliente } from '../clases/clientes';
 import { ITurno } from '../models/turno.model';
+import { ITurnoId } from '../models/turnoid.model';
 
 @Injectable({
   providedIn: 'root'
@@ -134,11 +135,15 @@ export class UsuariosService {
     return this.makeObservable(collection);
   }
 
-  agregarTurnosAEspecialista(especialistaUID: string, turnos: Array<ITurno>) {
-    turnos.forEach(iturno => {
-      const turnoRef = this.collection.doc(especialistaUID).collection('turnos').add(iturno);
+  agregarTurnos(turnos: Array<ITurnoId>): Promise<void> {
+    // TODO hacer un batch para saber cuando termina el proceso entero porque sino es la suma de todos los procesos solamente
+    const especialistaUID = turnos[0].turno.especialistaUID;
+    const turnosCollection = this.collection.doc(especialistaUID).collection('turnos');
+    const batch = this.afs.firestore.batch();
+    turnos.forEach((iturnoid: ITurnoId) => {
+      turnosCollection.doc(iturnoid.id).set(iturnoid.turno);
     });
-
+    return batch.commit();
   }
 
 }

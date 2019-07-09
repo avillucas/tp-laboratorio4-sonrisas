@@ -1,11 +1,11 @@
 export interface ITurno {
   time: any;
-  consultorio: number;
+  consultorio: string;
+  especialistaUID: string;
+  especialistaNombre: string;
   clienteUID?: string;
   clienteNombre?: string;
-  especialistaUID?: string;
-  especialistaNombre?: string;
-  resena?: string;
   asistio?: boolean;
+  resena?: string;
 }
 

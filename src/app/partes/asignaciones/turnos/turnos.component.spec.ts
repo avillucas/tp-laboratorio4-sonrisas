@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResenaComponent } from './resena.component';
+import { TurnosComponent } from './turnos.component';
 
-describe('ResenaComponent', () => {
-  let component: ResenaComponent;
-  let fixture: ComponentFixture<ResenaComponent>;
+describe('TurnosComponent', () => {
+  let component: TurnosComponent;
+  let fixture: ComponentFixture<TurnosComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ResenaComponent ]
+      declarations: [ TurnosComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ResenaComponent);
+    fixture = TestBed.createComponent(TurnosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

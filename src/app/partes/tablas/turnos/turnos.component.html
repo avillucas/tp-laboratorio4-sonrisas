@@ -9,7 +9,7 @@
       <th>Acciones</th>
     </tr>
   </thead>  <!-- semana -->
-  <caption>Día {{ Dia | date:'dd-MM-yyyy' }} con el especialista {{ Especialista }} </caption>
+  <caption>Día {{ Dia | date:'dd-MM-yyyy' }} con el especialista {{ Especialista.usuario.Nombre }} </caption>
   <tbody>
     <tr *ngFor="let iturnoid of Turnos | async ">
       <!-- Horario  mostrar  -->

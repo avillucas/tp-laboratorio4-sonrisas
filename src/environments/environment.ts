@@ -26,7 +26,8 @@ export const environment = {
   },
   collections: {
     usuarios: {
-      turnos: 'turnos'
+      turnos: 'turnos',
+      reservas: 'reservas'
     }
   },
   storage: {

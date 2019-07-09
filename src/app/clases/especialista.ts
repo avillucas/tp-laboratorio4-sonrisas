@@ -11,7 +11,4 @@ export class Especialista extends Usuario {
     super(email, nombre, TipoUsuario.especialista, profileImage);
   }
 
-  public generarMisTurnosDisponiblesTodoElDia(dia: Date): Array<ITurno> {
-    return TurnosService.generarTurnosDisponiblesTodoElDia(dia);
-  }
 }

@@ -8,14 +8,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Turno } from '../clases/turno';
 import { IUsuario } from '../models/usuario.model';
-import { Usuario } from '../clases/usuario';
-import { TipoUsuario } from '../enums/tipo-usuario.enum';
-import { Administrador } from '../clases/administrador';
-import { Especialista } from '../clases/especialista';
-import { Recepcionista } from '../clases/recepcionista';
-import { Cliente } from '../clases/clientes';
 import { Helpers } from '../clases/helpers';
 import { IRangoHorario } from '../models/rangohorario.model';
+import { Consultorios } from '../enums/consultorios.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -35,10 +30,9 @@ export class TurnosService {
     return (typeof iturnoid.turno.clienteUID !== 'undefined');
   }
 
-  static DAOData(turno: Turno): ITurno {
-    return {
-      time: turno.Time
-    };
+  static generarId(nTime: Date, consultorio: Consultorios): string {
+    const consultorioStr = Consultorios[consultorio].toString();
+    return nTime.getTime() + consultorioStr;
   }
 
   static DataDAO(iturno: ITurno): Turno {
@@ -46,27 +40,39 @@ export class TurnosService {
     return new Turno(fecha);
   }
 
-
-  static generarTurnosDisponiblesTodoElDia(dia: Date): Array<ITurno> {
+  static generarTurnosDisponiblesTodoElDia(dia: Date, consultorio: Consultorios, especialista: IUsuarioId): Array<ITurnoId> {
     const aux = new Date(dia);
     const rangoHorario: IRangoHorario = Helpers.traerRangoHorario(aux);
     const time: Date = new Date(rangoHorario.inicio);
-    const turnos: Array<ITurno> = new Array<ITurno>();
+    const iturnosid: Array<ITurnoId> = new Array<ITurnoId>();
     const TiempoMinimoConsulta = environment.clinica.tiempoMinimoConsulta;
     do {
       const nTime = new Date(time);
-      const turno = { time: nTime } as ITurno;
-      turnos.push(turno);
+      const consultorioStr = Consultorios[consultorio].toString();
+      const id = TurnosService.generarId(nTime, consultorio);
+      const iturnoid = {
+        id,
+        turno: {
+          time: nTime,
+          consultorio: consultorioStr,
+          especialistaUID: especialista.id,
+          especialistaNombre: especialista.usuario.Nombre
+        } as ITurno
+      } as ITurnoId;
+
+      iturnosid.push(iturnoid);
       time.setMinutes(time.getMinutes() + TiempoMinimoConsulta, 0, 0);
     } while (time <= rangoHorario.fin);
-    return turnos;
+    return iturnosid;
   }
 
 
-  Reservar(turnoID: string, iturno: ITurno, especialistaUID: string) {
+  actualizar(iturnoid: ITurnoId) {
     this.afs.collection(environment.db.usuarios)
-      .doc<IUsuario>(especialistaUID)
-      .collection<ITurno>(environment.collections.usuarios.turnos).doc(turnoID).set(iturno);
+      .doc<IUsuario>(iturnoid.turno.especialistaUID)
+      .collection<ITurno>(environment.collections.usuarios.turnos)
+      .doc(iturnoid.id)
+      .set(iturnoid.turno);
   }
 
   registrarResena(turnoID: string, iturno: ITurno, especialistaUID: string) {
@@ -91,6 +97,14 @@ export class TurnosService {
     return this.makeObservable(colection);
   }
 
+  traerReservasPorUsuario(usuarioUID: string): Observable<ITurnoId[]> {
+    const colection: AngularFirestoreCollection<ITurno> = this.afs.collection(environment.db.usuarios)
+      .doc<IUsuario>(usuarioUID)
+      .collection<ITurno>(environment.collections.usuarios.reservas, ref => ref.orderBy('time')
+      );
+    return this.makeObservable(colection);
+  }
+
   private makeObservable(collection: AngularFirestoreCollection<ITurno>) {
     return collection.snapshotChanges().pipe(
       map(actions => {
@@ -101,26 +115,6 @@ export class TurnosService {
         });
       }));
   }
-
-  get Observable() {
-    return this.makeObservable(this.collection);
-  }
-
-  crear(turno: Turno) {
-    const iturno = TurnosService.DAOData(turno);
-    return this.collection.add(iturno);
-  }
-
-  borrar(id: string) {
-    return this.collection.doc(id).delete();
-  }
-
-  actualizar(id: string, turno: Turno) {
-    const userRef: AngularFirestoreDocument<ITurno> = this.afs.doc(`${environment.db.turnos}/${id}`);
-    const iturno = TurnosService.DAOData(turno);
-    return userRef.set(iturno, { merge: true });
-  }
-
 
 }
 

@@ -4,13 +4,14 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IUsuarioId } from '../../../models/usuarioid.model';
 import { UsuariosService } from '../../../servicios/usuarios.service';
+import { IUsuario } from '../../../models/usuario.model';
 
 @Component({
   selector: 'app-especialista',
   templateUrl: './especialista.component.html',
   styleUrls: ['./especialista.component.css']
 })
-export class EspecialistaComponent implements OnInit {
+export class SelectorEspecialistaComponent implements OnInit {
 
   @Output() filtrosAplicados = new EventEmitter();
 
@@ -34,13 +35,10 @@ export class EspecialistaComponent implements OnInit {
     return this.especialistas;
   }
 
-
   Filtrar() {
-    // TODO devolver todo el especialista
-    const eUID = this.EspecialistasInput.value;
-    this.filtrosAplicados.emit({ eUID });
+    const especialista: IUsuarioId = this.EspecialistasInput.value as IUsuarioId;
+    this.filtrosAplicados.emit(especialista);
   }
-
 
   ngOnInit() {
   }

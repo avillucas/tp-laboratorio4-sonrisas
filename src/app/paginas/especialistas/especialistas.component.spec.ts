@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SelectorEspecialistaComponent } from './especialista.component';
+import { EspecialistasComponent } from './especialistas.component';
 
-describe('EspecialistaComponent', () => {
-  let component: SelectorEspecialistaComponent;
-  let fixture: ComponentFixture<SelectorEspecialistaComponent>;
+describe('EspecialistasComponent', () => {
+  let component: EspecialistasComponent;
+  let fixture: ComponentFixture<EspecialistasComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelectorEspecialistaComponent ]
+      declarations: [ EspecialistasComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SelectorEspecialistaComponent);
+    fixture = TestBed.createComponent(EspecialistasComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

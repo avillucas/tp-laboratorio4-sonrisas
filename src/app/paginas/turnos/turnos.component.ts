@@ -1,14 +1,12 @@
 import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { TurnosService } from 'src/app/servicios/turnos.service';
-import { ActivatedRoute } from '@angular/router';
-import { environment } from '../../../environments/environment';
-import { UsuariosService } from '../../servicios/usuarios.service';
 import { ITurnoId } from '../../models/turnoid.model';
-import { TurnoDia } from '../../clases/turno-dia';
 import { AuthService } from '../../servicios/auth.service';
+import { IUsuarioId } from '../../models/usuarioid.model';
 import { IUsuario } from '../../models/usuario.model';
-import { ITurno } from '../../models/turno.model';
+import { UsuariosService } from '../../servicios/usuarios.service';
+import { Usuario } from '../../clases/usuario';
 
 @Component({
   selector: 'app-turnos',
@@ -19,19 +17,34 @@ export class TurnosComponent implements OnInit {
 
   private diaConsultado: Date;
   private turnos: Observable<ITurnoId[]>;
-  private especialistaUID: string;
+  private reservas: Observable<ITurnoId[]>;
+  private especialista: IUsuarioId;
+  private cliente: IUsuarioId;
   private ocultarSelectorFechas: boolean;
+  private ocultarTablaTurnos: boolean;
+  private ocultarEncuestas: boolean;
 
 
   constructor(
     private tService: TurnosService,
+    private uService: UsuariosService,
     private aService: AuthService
   ) {
     this.ocultarSelectorFechas = true;
+    this.ocultarTablaTurnos = true;
+    this.ocultarEncuestas = true;
+    this.aService.user$.subscribe(
+      (iusuario: IUsuario) => {
+        this.cliente = { id: this.aService.CurrentUID, usuario: UsuariosService.DataDAO(iusuario) } as IUsuarioId;
+      });
   }
 
   public get OcultarSelectorFechas(): boolean {
     return this.ocultarSelectorFechas;
+  }
+
+  public get OcultarEncuestas(): boolean {
+    return this.ocultarEncuestas;
   }
 
   public get DiaConsultado(): Date {
@@ -39,32 +52,64 @@ export class TurnosComponent implements OnInit {
   }
 
   public get EspecialistaUID(): string {
-    return this.especialistaUID;
+    return this.especialista.id;
   }
 
-  public get Usuario(): Observable<IUsuario> {
-    return this.aService.user$;
+  public get Especialista(): IUsuarioId {
+    return this.especialista;
+  }
+
+  public get CurrentUID(): string {
+    return this.aService.CurrentUID;
   }
 
   public get Turnos(): Observable<ITurnoId[]> {
     return this.turnos;
   }
 
+  public get Reservas(): Observable<ITurnoId[]> {
+    return this.reservas;
+  }
+
+  public get OcultarTablaTurnos() {
+    return this.ocultarTablaTurnos;
+  }
+
+  public get OcultarTablaReservas() {
+    return typeof this.reservas === 'undefined';
+  }
+
   public ReservarTurno(iturnoid: ITurnoId) {
-    const iturno = { time: iturnoid.turno.time, clienteUID: this.aService.CurrentUID } as ITurno;
-    this.tService.Reservar(iturnoid.id, iturno, this.especialistaUID);
+    iturnoid.turno.clienteUID = this.cliente.id;
+    iturnoid.turno.clienteNombre = this.cliente.usuario.Nombre;
+    this.tService.actualizar(iturnoid);
   }
 
-  EspecialistaSeleccionado(especialistaUID: string) {
-    this.especialistaUID = especialistaUID;
+  public CancelarTurno(iturnoid: ITurnoId) {
+    iturnoid.turno.clienteUID = null;
+    iturnoid.turno.clienteNombre = null;
+    this.tService.actualizar(iturnoid);
   }
 
-  AplicarFiltros(fecha: string) {
-    this.diaConsultado = new Date(fecha + ' 00:00:00');
-    this.turnos = this.tService.traerPorDiaEspecialista(this.diaConsultado, this.especialistaUID);
+  public SolicitarEncuesta(iturnoid: ITurnoId) {
+    // TODO
+    this.ocultarEncuestas = false;
+    throw new Error('No implementado aun');
+  }
+
+  EspecialistaSeleccionado(especialista: IUsuarioId) {
+    this.especialista = especialista;
+    this.ocultarSelectorFechas = false;
+  }
+
+  AplicarFiltros(diaConsultado: Date) {
+    this.diaConsultado = diaConsultado;
+    this.turnos = this.tService.traerPorDiaEspecialista(this.diaConsultado, this.especialista.id);
+    this.ocultarTablaTurnos = false;
   }
 
   ngOnInit() {
+    this.reservas = this.tService.traerReservasPorUsuario(this.CurrentUID);
   }
 
 

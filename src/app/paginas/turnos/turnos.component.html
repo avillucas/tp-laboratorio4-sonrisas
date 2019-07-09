@@ -1,7 +1,17 @@
 <h1> Mis reservas</h1>
 <!-- Mis resevados -->
-<app-reservas [usuario]="Usuario | async" (cancelarTurno)="CancelarTurno($event)" (solicitarEncuesta)="SolicitarEncuesta($event)" ></app-reservas>
-<hr/>
+<app-tabla-reservas *ngIf="!OcultarTablaReservas"
+ [clienteUID]="CurrentUID"
+  (cancelarTurno)="CancelarTurno($event)"
+  (completarEncuesta)="SolicitarEncuesta($event)"
+  [reservas]="Reservas">
+</app-tabla-reservas>
+<!-- encuesta -->
+<app-encuesta *ngIf="!OcultarEncuestas">
+
+</app-encuesta>
+
+<hr />
 <h1>Reservar un nuevo Turno</h1>
 <!-- filtros -->
 <div class="row">
@@ -13,16 +23,16 @@
     <!-- -->
   </div>
 </div>
-<div class="row">
-      <!-- Tabla de turnos disponibles -->
+<div class="row" *ngIf="!OcultarTablaTurnos">
   <div class="col-xs-12">
-    <app-turnos-tabla
+    <!-- Tabla de turnos disponibles -->
+    <app-tabla-turnos
     [turnos]="Turnos"
     [dia]="DiaConsultado"
-    [especialista]="EspecialistaUID"
-    [usuario]="Usuario | async"
+    [clienteUID]="CurrentUID"
+    [especialista]="Especialista"
     (reservarTurno)="ReservarTurno($event)"
-    >
-    </app-turnos-tabla>
-</div>
+    (cancelarTurno)="CancelarTurno($event)"
+    ></app-tabla-turnos>
+  </div>
 </div>

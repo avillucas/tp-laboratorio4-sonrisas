@@ -1,5 +1,3 @@
-import { TurnosEspecialistaComponent } from './paginas/turnos-especialista/turnos-especialista.component';
-import { TurnosRecepcionistaComponent } from './paginas/turnos-recepcionista/turnos-recepcionista.component';
 import { AuthGuard } from './guards/auth.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -12,11 +10,13 @@ import { TemplateComponent } from './paginas/template/template.component';
 import { IsAdminGuard } from './guards/is-admin.guard';
 import { UsuariosComponent } from './paginas/usuarios/usuarios.component';
 import { TurnosComponent } from './paginas/turnos/turnos.component';
-import { EspecialistasLaboralesComponent } from './paginas/especialistas-laborales/especialistas-laborales.component';
 import { ProfileComponent } from './paginas/profile/profile.component';
 import { IsEspecialistaGuard } from './guards/is-especialista.guard';
 import { IsRecepcionistaGuard } from './guards/is-recepcionista.guard';
 import { IsClienteGuard } from './guards/is-cliente.guard';
+import { SelectorEspecialistaComponent } from './partes/filtros/especialista/especialista.component';
+import { EspecialistasComponent } from './paginas/especialistas/especialistas.component';
+
 
 const routes: Routes = [
   { path: 'registro', component: RegistroComponent },
@@ -27,11 +27,9 @@ const routes: Routes = [
     children: [
       { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'turnos', component: TurnosComponent, canActivate: [AuthGuard, IsClienteGuard] },
-      { path: 'turnos-especialista', component: TurnosEspecialistaComponent, canActivate: [AuthGuard, IsEspecialistaGuard] },
-      { path: 'turnos-recepcionista', component: TurnosRecepcionistaComponent, canActivate: [AuthGuard, IsRecepcionistaGuard] },
       { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard, IsAdminGuard] },
-      { path: 'especialistas-horarios', component: EspecialistasLaboralesComponent, canActivate: [AuthGuard, IsAdminGuard] },
+      { path: 'especialistas', component: EspecialistasComponent, canActivate: [AuthGuard, IsAdminGuard] },
       { path: '**', component: NotfoundComponent },
       { path: 'error', component: ErrorComponent }
     ]
