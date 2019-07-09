@@ -8,7 +8,7 @@ import { TurnosService } from '../../../servicios/turnos.service';
   templateUrl: './reservas.component.html',
   styleUrls: ['./reservas.component.css']
 })
-//reservas que se realizaron un por un cliente
+// Reservas que se realizaron un por un cliente
 export class ReservasComponent implements OnInit {
 
   //  turnos filtrados por especialista y dia
@@ -30,7 +30,7 @@ export class ReservasComponent implements OnInit {
     return this.dia;
   }
 
-  get Turnos(): Observable<ITurnoId[]> {
+  get Reservas(): Observable<ITurnoId[]> {
     return this.reservas;
   }
 
@@ -48,15 +48,6 @@ export class ReservasComponent implements OnInit {
 
   CompletarEncuesta(iturnoid: ITurnoId) {
     this.completarEncuesta.emit(iturnoid);
-  }
-
-  public AccionDisponibleMostrar(iturnoid: ITurnoId) {
-    if (typeof iturnoid.turno.asistio === 'undefined') {
-      return 'cancelar';
-    }
-    if (typeof iturnoid.turno.resena === 'undefined') {
-      return 'encuesta';
-    }
   }
 
   ngOnInit() {

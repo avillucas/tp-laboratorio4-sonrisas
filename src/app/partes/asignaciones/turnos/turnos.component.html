@@ -15,7 +15,7 @@
 
 <div class="row" *ngIf="MostrarCarga">
   <h1>Realizar carga disponibles </h1>
-  <p>Cargar Turnos del especilista {{ Especialista.usuario.Nombre }} para el dia {{ DiaConsultado | date :'dd-MM-YY' }} en el
-    {{ ConsultorioSeleccionado }} </p>
+  <p>Cargar Turnos del especilista {{ Especialista.usuario.Nombre }} para el dia {{ DiaConsultado | date :'dd-MM-yyyy' }} en el
+    {{ Consultorio | consultorio }} </p>
   <button (click)="Cargar()">Cargar</button>
 </div>

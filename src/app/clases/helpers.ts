@@ -12,7 +12,7 @@ export class Helpers {
    * @param dia  para que el que se busca determinar el rango de horas de la clinica
    */
   static traerRangoHorario(dia: Date): IRangoHorario {
-    if (dia.getDay() === 6) {
+    if (dia.getDay() === 0) {
       // domingo
       throw new Error('No es posible asignar turnos ya que la clinica no trabaja los domingos');
     }

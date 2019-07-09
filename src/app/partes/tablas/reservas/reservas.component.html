@@ -4,24 +4,24 @@
   <thead>
     <tr>
       <th>Horario</th>
-      <th>Paciente</th>
+      <th>Especialista</th>
       <th>Acciones</th>
     </tr>
   </thead> <!-- semana -->
   <caption>Día {{ Dia | date:'dd-MM-yyyy' }}  </caption>
   <tbody>
-    <tr *ngFor="let iturno of Turnos | async ">
+    <tr *ngFor="let iturnoid of Reservas | async ">
       <!-- Horario  mostrar  -->
-      <td class="hora">{{ iturno.turno.time | timestr | date:'HH:mm:ss' }}</td>
-      <td>{{ iturno.turno.especialistaUID }}</td>
-      <td [ngSwitch]="AccionDisponibleMostrar(iturno)">
-        <div *ngSwitchCase="encuesta" >
-          <h2> Breve resumen de tratamiente realizado</h2>
-          <p>{{ iturno.turno.resena }}</p>
-          <button  (click)="CompletarEncuesta(iturno)">Completar Encuesta</button>
-        </div>
-        <button *ngSwitchCase="cancelar" (click)="CancelarTurno(iturnoid)">Cancelar Turno</button>
-        <span *ngSwitchDefault class="nodisponible">No Disponible</span>
+      <td class="hora">{{ iturnoid.turno.time | timestr | date:'HH:mm:ss' }}</td>
+      <td>{{ iturnoid.turno.especialistaNombre }}</td>
+      <td>
+        <app-reservas-accion
+        [iturnoid]="iturnoid"
+        (completarEncuesta)="CompletarEncuesta($event)"
+        (cancelarTurno)="CancelarTurno($event)"
+        >
+
+        </app-reservas-accion>
       </td>
     </tr>
   </tbody>

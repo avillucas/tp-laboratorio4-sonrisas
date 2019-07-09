@@ -82,17 +82,15 @@ export class TurnosComponent implements OnInit {
   public ReservarTurno(iturnoid: ITurnoId) {
     iturnoid.turno.clienteUID = this.cliente.id;
     iturnoid.turno.clienteNombre = this.cliente.usuario.Nombre;
-    this.tService.actualizar(iturnoid);
+    this.tService.Reservar(iturnoid);
   }
 
   public CancelarTurno(iturnoid: ITurnoId) {
-    iturnoid.turno.clienteUID = null;
-    iturnoid.turno.clienteNombre = null;
-    this.tService.actualizar(iturnoid);
+   this.tService.Cancelar(iturnoid);
   }
 
   public SolicitarEncuesta(iturnoid: ITurnoId) {
-    // TODO
+    // TODO completar el proceso de encuestas
     this.ocultarEncuestas = false;
     throw new Error('No implementado aun');
   }

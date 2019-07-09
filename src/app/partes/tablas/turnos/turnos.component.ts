@@ -42,11 +42,9 @@ export class TablaTurnosComponent implements OnInit {
     return this.especialista;
   }
 
-
   get ClienteUID(): string {
     return this.clienteUID;
   }
-
 
   ReservarTurno(iturnoid: ITurnoId) {
     this.reservarTurno.emit(iturnoid);
@@ -56,19 +54,8 @@ export class TablaTurnosComponent implements OnInit {
     this.cancelarTurno.emit(iturnoid);
   }
 
-  public AccionDisponibleMostrar(iturnoid: ITurnoId) {
-    if (TurnosService.estaReservado(iturnoid)) {
-      // tslint:disable-next-line: triple-equals
-      if (iturnoid.turno.asistio === false && iturnoid.turno.clienteUID == this.clienteUID) {
-        return 'cancelar';
-      }
-      return 'reservado';
-    } else {
-      return 'reservar';
-    }
-  }
-
   ngOnInit() {
 
   }
+
 }

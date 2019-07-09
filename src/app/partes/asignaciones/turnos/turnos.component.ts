@@ -3,7 +3,6 @@ import { Consultorios } from '../../../enums/consultorios.enum';
 import { UsuariosService } from '../../../servicios/usuarios.service';
 import { TurnosService } from '../../../servicios/turnos.service';
 import { IUsuarioId } from '../../../models/usuarioid.model';
-import { ITurno } from '../../../models/turno.model';
 import { ITurnoId } from '../../../models/turnoid.model';
 
 @Component({
@@ -29,6 +28,10 @@ export class AsignacionTurnosComponent implements OnInit {
 
   get Especialista(): IUsuarioId {
     return this.especialista;
+  }
+
+  get Consultorio(): Consultorios {
+    return this.consultorio;
   }
 
   get OcultarSelectorConsultorio(): boolean {
@@ -64,7 +67,13 @@ export class AsignacionTurnosComponent implements OnInit {
       this.consultorio,
       this.especialista
     );
-    this.uService.agregarTurnos(iturnosid);
+    this.uService.agregarTurnos(iturnosid).then(res => {
+      alert('turnos agregados')
+    },
+      error => {
+        console.info(error);
+        alert('error al agregar turnos')
+      });
   }
 
   public get DiaConsultado(): Date {

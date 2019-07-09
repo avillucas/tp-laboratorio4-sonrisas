@@ -11,6 +11,7 @@ import { IUsuario } from '../models/usuario.model';
 import { Helpers } from '../clases/helpers';
 import { IRangoHorario } from '../models/rangohorario.model';
 import { Consultorios } from '../enums/consultorios.enum';
+import { firestore } from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,18 @@ export class TurnosService {
 
   static estaReservado(iturnoid: ITurnoId): boolean {
     return (typeof iturnoid.turno.clienteUID !== 'undefined');
+  }
+
+  static seAsistio(iturnoid: ITurnoId): boolean {
+    return typeof iturnoid.turno.asistio !== 'undefined'
+  }
+
+  static reservadoPorUsuario(iturnoid: ITurnoId, clienteUID: string): boolean {
+    return (iturnoid.turno.clienteUID === clienteUID);
+  }
+
+  static esCancelablePorUsuario(iturnoid: ITurnoId, clienteUID: string) {
+    return (!TurnosService.seAsistio(iturnoid) && TurnosService.reservadoPorUsuario(iturnoid, clienteUID));
   }
 
   static generarId(nTime: Date, consultorio: Consultorios): string {
@@ -59,18 +72,69 @@ export class TurnosService {
           especialistaNombre: especialista.usuario.Nombre
         } as ITurno
       } as ITurnoId;
-
       iturnosid.push(iturnoid);
       time.setMinutes(time.getMinutes() + TiempoMinimoConsulta, 0, 0);
     } while (time <= rangoHorario.fin);
     return iturnosid;
   }
 
+  //TODO averiguar como hacer esto correctamente
+  public static tieneCliente(iturnoid: ITurnoId) {
+    if (typeof iturnoid.turno.clienteUID === 'undefined' || typeof iturnoid.turno.clienteNombre === 'undefined') {
+      throw Error('El turno no tiene el cliente a quien se lo debe reservar ');
+    }
+  }
 
-  actualizar(iturnoid: ITurnoId) {
-    this.afs.collection(environment.db.usuarios)
+  public Reservar(iturnoid: ITurnoId): Promise<void> {
+    TurnosService.tieneCliente(iturnoid);
+    // actualizar el turno en el especialista
+    return this.actualizarTurno(iturnoid).then(res => {
+      // crear la reserva en el cliente
+      return this.actualizarReserva(iturnoid);
+    });
+  }
+
+  public Cancelar(iturnoid: ITurnoId): Promise<void> {
+    // eliminar la reserva en el cliente
+    return this.eliminarReserva(iturnoid).then(res => {
+      return this.cancelarTurno(iturnoid);
+    });
+
+  }
+
+  private cancelarTurno(iturnoid: ITurnoId): Promise<void> {
+    return this.afs.collection(environment.db.usuarios)
       .doc<IUsuario>(iturnoid.turno.especialistaUID)
       .collection<ITurno>(environment.collections.usuarios.turnos)
+      .doc(iturnoid.id)
+      .update({
+        clienteUID: firestore.FieldValue.delete(),
+        clienteNombre: firestore.FieldValue.delete(),
+      });
+  }
+
+  private eliminarReserva(iturnoid: ITurnoId): Promise<void> {
+    TurnosService.tieneCliente(iturnoid);
+    return this.afs.collection(environment.db.usuarios)
+      .doc<IUsuario>(iturnoid.turno.clienteUID)
+      .collection<ITurno>(environment.collections.usuarios.reservas)
+      .doc(iturnoid.id).delete();
+  }
+
+
+  private actualizarTurno(iturnoid: ITurnoId): Promise<void> {
+    return this.afs.collection(environment.db.usuarios)
+      .doc<IUsuario>(iturnoid.turno.especialistaUID)
+      .collection<ITurno>(environment.collections.usuarios.turnos)
+      .doc(iturnoid.id)
+      .set(iturnoid.turno);
+  }
+
+  private actualizarReserva(iturnoid: ITurnoId): Promise<void> {
+    TurnosService.tieneCliente(iturnoid);
+    return this.afs.collection(environment.db.usuarios)
+      .doc<IUsuario>(iturnoid.turno.clienteUID)
+      .collection<ITurno>(environment.collections.usuarios.reservas)
       .doc(iturnoid.id)
       .set(iturnoid.turno);
   }

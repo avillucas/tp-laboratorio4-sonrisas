@@ -42,6 +42,8 @@ import { EncuestaComponent } from './partes/encuesta/encuesta.component';
 import { ConsultorioComponent } from './partes/filtros/consultorio/consultorio.component';
 import { EspecialistasComponent } from './paginas/especialistas/especialistas.component';
 import { AsignacionTurnosComponent } from './partes/asignaciones/turnos/turnos.component';
+import { TurnosAccionComponent } from './partes/turnos-accion/turnos-accion.component';
+import { ReservasAccionComponent } from './partes/reservas-accion/reservas-accion.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +73,8 @@ import { AsignacionTurnosComponent } from './partes/asignaciones/turnos/turnos.c
     ConsultorioComponent,
     EspecialistasComponent,
     AsignacionTurnosComponent,
+    TurnosAccionComponent,
+    ReservasAccionComponent,
   ],
   imports: [
     BrowserModule,
